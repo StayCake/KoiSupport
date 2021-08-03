@@ -2,7 +2,7 @@ name: KoiSupport
 main: com.koisv.support.Main
 version: 0.3-SNAPSHOT
 api-version: 1.17
-depend: [Kotlin,ProtocolLib]
+depend: [Kotlin]
 load: POSTWORLD
 libraries:
   - com.github.stefvanschie.inventoryframework:IF:0.10.0
