@@ -1,6 +1,7 @@
 package com.koisv.support.commands
 
 import com.koisv.support.Main
+import hazae41.minecraft.kutils.get
 import io.github.monun.kommand.node.LiteralNode
 import org.bukkit.Sound
 import org.bukkit.configuration.file.YamlConfiguration
@@ -29,7 +30,7 @@ object Reload {
             }
             executes {
                 val p = sender as Player
-                getInstance().reloadConfig()
+                getInstance().config.load(getInstance().dataFolder["config.yml"])
                 getStats().load(getStatsloc())
                 p.sendMessage("리로드 완료!")
                 p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F)

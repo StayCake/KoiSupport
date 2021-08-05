@@ -255,7 +255,7 @@ class Events : Listener {
             it.isCancelled = true
             val lvf : Boolean = playerlv >= reqlv
             when {
-                lvf -> buymessage(p,mainprice,main,who)
+                lvf -> buymessage(p,priceint,main,who)
                 else -> p.msg("$who §7≫ §f레벨이 부족합니다.")
             }
         }
@@ -800,15 +800,15 @@ class Events : Listener {
             it.isCancelled = true
         }
         val p1 = shopitem(p,0,"부서진 곡괭이",50000,"\"아니, 캐지기는 하는 거야?\"","Mine",Material.WOODEN_PICKAXE)
-        val p2 = shopitem(p,2,"닳은 곡괭이",50000,"가벼워서 부서질 수준이다.","Mine",Material.GOLDEN_PICKAXE)
+        val p2 = shopitem(p,2,"닳은 곡괭이",30000,"가벼워서 부서질 수준이다.","Mine",Material.GOLDEN_PICKAXE)
         val p3 = shopitem(p,7,"중고 곡괭이",200000,"그나마 쓸 만한 녀석이다.","Mine",Material.STONE_PICKAXE)
         val p4 = shopitem(p,15,"곡괭이",750000,"철물점에서 본 듯한 녀석이다.","Mine",Material.IRON_PICKAXE)
         val p5 = shopitem(p,25,"전문 곡괭이",2000000,"관리되고 있는 녀석이라고 한다.","Mine",Material.DIAMOND_PICKAXE)
         val p6 = shopitem(p,40,"장인 곡괭이",5000000,"직접 갈고닦은 녀석이라고 한다.","Mine",Material.NETHERITE_PICKAXE)
         val md = enchantshopitem(p, 35, Enchantment.MENDING, 1, "수선", 3500000, "이젠 무한의 시대.","Mine", pickaxe)
-        val u1 = enchantshopitem(p, 2, Enchantment.DURABILITY, 1, "내구성 I", 50000,"자그마한 납땜.","Mine", pickaxe)
-        val u2 = enchantshopitem(p, 6, Enchantment.DURABILITY, 2, "내구성 II", 150000,"철판 덧대기.","Mine", pickaxe)
-        val u3 = enchantshopitem(p, 18, Enchantment.DURABILITY, 3, "내구성 III", 250000,"망치질 추가하기.","Mine", pickaxe)
+        val u1 = enchantshopitem(p, 2, Enchantment.DURABILITY, 1, "내구성 I", 30000,"자그마한 납땜.","Mine", pickaxe)
+        val u2 = enchantshopitem(p, 6, Enchantment.DURABILITY, 2, "내구성 II", 70000,"철판 덧대기.","Mine", pickaxe)
+        val u3 = enchantshopitem(p, 18, Enchantment.DURABILITY, 3, "내구성 III", 150000,"망치질 추가하기.","Mine", pickaxe)
         val l1 = enchantshopitem(p, 5, Enchantment.LOOT_BONUS_BLOCKS, 1, "행운 I", 85000,"네잎 클로버를 찾았다.","Mine", pickaxe)
         val l2 = enchantshopitem(p, 12, Enchantment.LOOT_BONUS_BLOCKS, 2, "행운 II", 190000,"행운이 함께하길 빌었다.","Mine", pickaxe)
         val l3 = enchantshopitem(p, 21, Enchantment.LOOT_BONUS_BLOCKS, 3, "행운 III", 320000,"신이 도와주길 바랬다.","Mine", pickaxe)
@@ -1044,7 +1044,7 @@ class Events : Listener {
     private fun getMineCost(item : Material) : Int {
         return when (item) {
             Material.COBBLESTONE -> 500
-            Material.COAL -> 3600
+            Material.COAL -> 3700
             else -> 0
         }
     }
