@@ -23,15 +23,17 @@ object Reload {
     }
 
     fun register(builder: LiteralNode) {
-        builder.requires {
-            hasPermission(4,"admin.reload") && playerOrNull != null
-        }
-        builder.executes {
-            val p = sender as Player
-            getInstance().reloadConfig()
-            getStats().load(getStatsloc())
-            p.sendMessage("리로드 완료!")
-            p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F)
+        builder.then("reload") {
+            requires {
+                hasPermission(4,"admin.reload") && playerOrNull != null
+            }
+            executes {
+                val p = sender as Player
+                getInstance().reloadConfig()
+                getStats().load(getStatsloc())
+                p.sendMessage("리로드 완료!")
+                p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F)
+            }
         }
     }
 }

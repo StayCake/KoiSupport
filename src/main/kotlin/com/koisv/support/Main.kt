@@ -94,13 +94,7 @@ class Main : JavaPlugin() {
             stats.save(statsloc)
         }
         kommand {
-            register("test") {
-                //requires { playerOrNull != null }
-                then("test") {
-                    executes { println("야호") }
-                }
-            }
-            register("ksreload") {
+            register("ks") {
                 Reload.register(this)
             }
             register("메뉴") {
