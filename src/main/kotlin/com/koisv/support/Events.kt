@@ -9,7 +9,6 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.*
-import org.bukkit.ChatColor.AQUA
 import org.bukkit.block.Block
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.enchantments.Enchantment
@@ -800,12 +799,12 @@ class Events : Listener {
         mineShop.setOnGlobalDrag {
             it.isCancelled = true
         }
-        val p1 = shopitem(p,0,"부셔진 곡괭이",70000,"\"아니, 캐지기는 하는 거야?\"","Mine",Material.WOODEN_PICKAXE)
-        val p2 = shopitem(p,4,"닳은 곡괭이",150000,"거의 못 쓸 수준이다.","Mine",Material.STONE_PICKAXE)
-        val p3 = shopitem(p,8,"중고 곡괭이",350000,"그나마 쓸 만한 녀석이다.","Mine",Material.GOLDEN_PICKAXE,-200)
-        val p4 = shopitem(p,14,"곡괭이",600000,"철물점에서 본 듯한 녀석이다.","Mine",Material.IRON_PICKAXE)
-        val p5 = shopitem(p,20,"전문 곡괭이",1250000,"관리되고 있는 녀석이라고 한다.","Mine",Material.DIAMOND_PICKAXE)
-        val p6 = shopitem(p,25,"장인 곡괭이",2750000,"직접 갈고닦은 녀석이라고 한다.","Mine",Material.NETHERITE_PICKAXE)
+        val p1 = shopitem(p,0,"부서진 곡괭이",50000,"\"아니, 캐지기는 하는 거야?\"","Mine",Material.WOODEN_PICKAXE)
+        val p2 = shopitem(p,2,"닳은 곡괭이",50000,"가벼워서 부서질 수준이다.","Mine",Material.GOLDEN_PICKAXE)
+        val p3 = shopitem(p,7,"중고 곡괭이",200000,"그나마 쓸 만한 녀석이다.","Mine",Material.STONE_PICKAXE)
+        val p4 = shopitem(p,15,"곡괭이",750000,"철물점에서 본 듯한 녀석이다.","Mine",Material.IRON_PICKAXE)
+        val p5 = shopitem(p,25,"전문 곡괭이",2000000,"관리되고 있는 녀석이라고 한다.","Mine",Material.DIAMOND_PICKAXE)
+        val p6 = shopitem(p,40,"장인 곡괭이",5000000,"직접 갈고닦은 녀석이라고 한다.","Mine",Material.NETHERITE_PICKAXE)
         val md = enchantshopitem(p, 35, Enchantment.MENDING, 1, "수선", 3500000, "이젠 무한의 시대.","Mine", pickaxe)
         val u1 = enchantshopitem(p, 2, Enchantment.DURABILITY, 1, "내구성 I", 50000,"자그마한 납땜.","Mine", pickaxe)
         val u2 = enchantshopitem(p, 6, Enchantment.DURABILITY, 2, "내구성 II", 150000,"철판 덧대기.","Mine", pickaxe)
@@ -826,7 +825,7 @@ class Events : Listener {
                     lore(
                         listOf(
                             Component.text("클릭하여 수리 인벤토리를 엽니다.")
-                                .color(TextColor.color(Main.colors(AQUA).asRGB()))
+                                .color(TextColor.color(Main.colors(ChatColor.AQUA).asRGB()))
                                 .decoration(TextDecoration.ITALIC,false)
                         )
                     )
@@ -901,7 +900,6 @@ class Events : Listener {
 
     private fun farmgui(p: Player) : ChestGui {
         val farmShop = ChestGui(6, "농산품 상점")
-        val test = p
         farmShop.title = p.customName.toString()
         return farmShop
     }
@@ -955,71 +953,103 @@ class Events : Listener {
 
     @EventHandler
     fun tla(e: EntityDamageByEntityEvent) {
-        if (e.damager.type == EntityType.PLAYER && e.entity.name == "${AQUA}어부") {
+        if (e.damager.type == EntityType.PLAYER) {
             val p = e.damager as Player
-            if (p.isSneaking){
-                val i : Inventory = p.inventory
-                var finalcost = 0
-                i.forEach {
-                    if (it != null) {
-                        val mh: ItemStack = it
-                        val mi = i.contents.indexOf(mh)
-                        val amt = mh.amount
-                        val cost: Int = when (mh.type) {
-                            Material.COD -> 200
-                            Material.SALMON -> 400
-                            Material.TROPICAL_FISH -> 900
-                            Material.PUFFERFISH -> 600
-                            else -> 0
+            val pmh = p.inventory.itemInMainHand
+            val fish = p.hasPermission("fisher.fish")
+            val mine = p.hasPermission("miner.mine")
+            var finalcost = 0
+            var check = false
+            var target = ""
+            when (e.entity.name) {
+                "${ChatColor.AQUA}어부" -> {
+                    target = "§e어부"
+                    if (p.isSneaking){
+                        val i : Inventory = p.inventory
+                        i.forEach {
+                            if (it != null) {
+                                val item: ItemStack = it
+                                val mi = i.contents.indexOf(item)
+                                val amt = item.amount
+                                val cost = getFishCost(item.type)
+                                if (cost != 0) p.inventory.setItem(mi,ItemStack(Material.AIR))
+                                finalcost += if (fish) (cost * amt * 1.05).toInt() else (cost * amt)
+                            }
                         }
-                        if (cost != 0) {
-                            p.inventory.setItem(mi,ItemStack(Material.AIR))
-                        }
-                        finalcost += if (p.hasPermission("fisher.fish")) {
-                            econ?.depositPlayer(p, (cost * amt * 1.05))
-                            (cost * amt * 1.05).toInt()
-                        } else {
-                            econ?.depositPlayer(p, (cost * amt).toDouble())
-                            (cost * amt)
-                        }
-                    }
-                }
-                if (finalcost == 0) {
-                    p.msg("§e어부 §7≫ §f낚시용품만 주세요...")
-                } else {
-                    p.msg("§e어부 §7≫ §f${finalcost}원에 드리죠.")
-                }
-            } else {
-                val amt = p.inventory.itemInMainHand.amount
-                val cost: Int = when (p.inventory.itemInMainHand.type) {
-                    Material.COD -> 200
-                    Material.SALMON -> 400
-                    Material.TROPICAL_FISH -> 900
-                    Material.PUFFERFISH -> 600
-                    else -> 0
-                }
-                val im = p.inventory.itemInMainHand.itemMeta
-                if (cost == 0 && !(trash.itemMeta == im || treasure.itemMeta == im)) {
-                    p.msg("§e어부 §7≫ §f낚시용품만 주세요...")
-                } else if (!(trash.itemMeta == im || treasure.itemMeta == im)) {
-                    p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
-                    if (p.hasPermission("fisher.fish")) {
-                        econ?.depositPlayer(p, cost * amt * 1.05)
-                        p.msg("§e어부 §7≫ §f${(cost * amt * 1.05).toInt()}원에 드리죠.")
                     } else {
-                        econ?.depositPlayer(p, (cost * amt).toDouble())
-                        p.msg("§e어부 §7≫ §f${cost * amt}원에 드리죠.")
+                        val amt = pmh.amount
+                        val im = pmh.itemMeta
+                        val cost = getFishCost(pmh.type)
+                        when (im){
+                            treasure.itemMeta -> {
+                                check = true
+                                farmTreasure(p,pmh.amount)
+                            }
+                            trash.itemMeta -> {
+                                check = true
+                                farmTrash(p,pmh.amount)
+                            }
+                            else -> {
+                                if (cost > 0) {
+                                    p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
+                                    finalcost += if (fish) (cost * amt * 1.05).toInt() else cost * amt
+                                }
+                            }
+                        }
                     }
-                } else if (treasure.itemMeta == im) {
-                    checkstreasure(p,p.inventory.itemInMainHand.amount)
-                } else if (trash.itemMeta == im) {
-                    checkstrash(p,p.inventory.itemInMainHand.amount)
+                }
+                "${ChatColor.GRAY}광부" -> {
+                    target = "§7광부"
+                    if (p.isSneaking) {
+                        val i : Inventory = p.inventory
+                        i.forEach {
+                            if (it != null) {
+                                val mh: ItemStack = it
+                                val mi = i.contents.indexOf(mh)
+                                val amt = mh.amount
+                                val cost = getMineCost(mh.type)
+                                if (cost != 0) p.inventory.setItem(mi,ItemStack(Material.AIR))
+                                finalcost += if (mine) (cost * amt * 1.05).toInt() else (cost * amt)
+                            }
+                        }
+                    } else {
+                        val amt = pmh.amount
+                        val cost = getMineCost(pmh.type)
+                        p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
+                        finalcost += if (mine) (cost * amt * 1.05).toInt() else cost * amt
+                    }
+                }
+                else -> check = true
+            }
+            if (!check) {
+                if (finalcost == 0) {
+                    p.msg("$target §7≫ §f판매 가능한 물건만 주세요...")
+                } else {
+                    econ?.depositPlayer(p, finalcost.toDouble())
+                    p.msg("$target §7≫ §f${finalcost}원에 받을게요.")
                 }
             }
         }
     }
 
-    private fun checkstreasure(
+    private fun getFishCost(item : Material) : Int {
+        return when (item) {
+            Material.COD -> 200
+            Material.SALMON -> 400
+            Material.TROPICAL_FISH -> 900
+            Material.PUFFERFISH -> 600
+            else -> 0
+        }
+    }
+    private fun getMineCost(item : Material) : Int {
+        return when (item) {
+            Material.COBBLESTONE -> 500
+            Material.COAL -> 3600
+            else -> 0
+        }
+    }
+
+    private fun farmTreasure(
         p: Player,
         amount: Int
     ) {
@@ -1056,7 +1086,7 @@ class Events : Listener {
         }, 2000L)
     }
 
-    private fun checkstrash(
+    private fun farmTrash(
         p: Player,
         amount: Int
     ) {
