@@ -2,11 +2,11 @@ values:
   expterm:
     fisher: 72
     farmer: 72
-    miner: 72
+    miner: 65
   firstexp:
     fisher: 200
     farmer: 200
-    miner: 200
+    miner: 50
   multiplier:
     fisher: 1.05
     farmer: 1.05

@@ -97,7 +97,7 @@ class Main : JavaPlugin() {
             register("ks") {
                 Reload.register(this)
             }
-            register("메뉴") {
+            register("menu","메뉴") {
                 Menu.register(this)
             }
             register("스텟관리") {

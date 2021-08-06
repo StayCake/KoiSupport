@@ -3,6 +3,7 @@ package com.koisv.support.commands
 import com.koisv.support.Main
 import hazae41.minecraft.kutils.get
 import io.github.monun.kommand.node.LiteralNode
+import net.kyori.adventure.key.Key
 import org.bukkit.Sound
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -33,7 +34,14 @@ object Reload {
                 getInstance().config.load(getInstance().dataFolder["config.yml"])
                 getStats().load(getStatsloc())
                 p.sendMessage("리로드 완료!")
-                p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F)
+                p.playSound(
+                    net.kyori.adventure.sound.Sound.sound(
+                        Key.key("entity.player.levelup"),
+                        net.kyori.adventure.sound.Sound.Source.PLAYER,
+                        1F,
+                        1F
+                    )
+                )
             }
         }
     }

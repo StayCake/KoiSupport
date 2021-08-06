@@ -5,13 +5,15 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.koisv.support.Main
 import hazae41.minecraft.kutils.bukkit.msg
+import net.kyori.adventure.key.Key
+import net.kyori.adventure.sound.Sound.Source
+import net.kyori.adventure.sound.Sound.sound
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryCloseEvent
@@ -129,31 +131,31 @@ class GameUI {
                         Thread.currentThread().interrupt()
                     }
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
-                        p.playSound(p.location, Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+                        p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
                         tutorial.addItem(t1, 0, 0)
                         inst.update()
                     })
                     Thread.sleep(1000)
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
-                        p.playSound(p.location, Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+                        p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
                         tutorial.addItem(t2, 2, 0)
                         inst.update()
                     })
                     Thread.sleep(1000)
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
-                        p.playSound(p.location, Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+                        p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
                         tutorial.addItem(t3, 4, 0)
                         inst.update()
                     })
                     Thread.sleep(1000)
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
-                        p.playSound(p.location, Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+                        p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
                         tutorial.addItem(t4, 6, 0)
                         inst.update()
                     })
                     Thread.sleep(1000)
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
-                        p.playSound(p.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F)
+                        p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,1F, 1F))
                         tutorial.addItem(start, 8, 0)
                         inst.update()
                     })
@@ -206,7 +208,8 @@ class GameUI {
                             x3++
                         }
                         ready.update()
-                        p.playSound(p.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 0.5F) })
+                        p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER, 1F, 0.5F))
+                    })
                     Thread.sleep(1000)
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
                         countpane.removeItem(thgi)
@@ -221,7 +224,7 @@ class GameUI {
                             x2++
                         }
                         ready.update()
-                        p.playSound(p.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 0.625F)
+                        p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,1F, 0.625F))
                     })
                     Thread.sleep(1000)
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
@@ -237,7 +240,7 @@ class GameUI {
                             x1++
                         }
                         ready.update()
-                        p.playSound(p.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 0.75F)
+                        p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,1F, 0.75F))
                     })
                     Thread.sleep(1000)
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
@@ -245,7 +248,7 @@ class GameUI {
                         countpane.isVisible = false
                         ready.update()
                         p.closeInventory(InventoryCloseEvent.Reason.OPEN_NEW)
-                        p.playSound(p.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F)
+                        p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,1F, 1F))
 
                         val gameui = ChestGui(2,"미니게임")
                         val gamepane = StaticPane(9,2)
@@ -273,7 +276,7 @@ class GameUI {
                             }
                         ) {
                             it.isCancelled = true
-                            p.playSound(p.location,Sound.ENTITY_EXPERIENCE_ORB_PICKUP,0.5F,1F)
+                            p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,1F, 1F))
                             score += 30
                             val y = it.slot/9
                             val x = it.slot - y*9
@@ -300,7 +303,7 @@ class GameUI {
                         ) {
                             if (it.click == ClickType.DOUBLE_CLICK) {
                                 it.isCancelled = true
-                                p.playSound(p.location,Sound.ENTITY_EXPERIENCE_ORB_PICKUP,0.5F,1F)
+                                p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,1F, 1F))
                                 score += 30
                                 val y = it.slot/9
                                 val x = it.slot - y*9
@@ -308,7 +311,7 @@ class GameUI {
                                 gameui.update()
                             } else {
                                 it.isCancelled = true
-                                p.playSound(p.location,Sound.ENTITY_EXPERIENCE_ORB_PICKUP,0.5F,0.675F)
+                                p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,1F, 0.675F))
                                 val y = it.slot/9
                                 val x = it.slot - y*9
                                 gamepane.addItem(twoscoretap,x,y)
@@ -327,7 +330,7 @@ class GameUI {
                             }
                         ) {
                             it.isCancelled = true
-                            p.playSound(p.location,Sound.ENTITY_EXPERIENCE_ORB_PICKUP,0.5F,0.5F)
+                            p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,0.5F, 0.5F))
                             score += 10
                             val y = it.slot/9
                             val x = it.slot - y*9
@@ -346,7 +349,7 @@ class GameUI {
                             }
                         ) {
                             it.isCancelled = true
-                            p.playSound(p.location,Sound.ENTITY_GENERIC_EXPLODE,0.5F,1F)
+                            p.playSound(sound(Key.key("entity.generic.explode"), Source.PLAYER,0.5F, 1F))
                             score -= 50
                             val y = it.slot/9
                             val x = it.slot - y*9
@@ -358,7 +361,7 @@ class GameUI {
                                 Bukkit.getScheduler().runTask(Main.instance, Runnable {
                                     if (it.reason != InventoryCloseEvent.Reason.CANT_USE) {
                                         p.closeInventory()
-                                        p.playSound(p.location, Sound.BLOCK_NOTE_BLOCK_HARP, 1F ,0.5F)
+                                        p.playSound(sound(Key.key("block.note_block.harp"), Source.PLAYER,1F, 0.5F))
                                         if (after == null) p.msg("$score 점") else after(score)
                                     }
                                 })
@@ -367,7 +370,7 @@ class GameUI {
                             for (i in 1..60) {
                                 Bukkit.getScheduler().runTask(Main.instance, Runnable {
                                     val ls = 61 - i
-                                    if (ls <= 3) p.playSound(p.location, Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1F, 1F)
+                                    if (ls <= 3) p.playSound(sound(Key.key("block.wooden_button.click_on"), Source.PLAYER,1F, 1F))
                                     gameui.title = "미니게임 | 남은시간 : ${if (ls <= 3) "&c" else ""}${ls}초"
                                 })
                                 val amount = (1 + Math.random() * (3 - 1)).roundToInt()
@@ -422,7 +425,7 @@ class GameUI {
                             }
                             if (!Thread.currentThread().isInterrupted) Bukkit.getScheduler().runTask(Main.instance, Runnable {
                                 p.closeInventory(InventoryCloseEvent.Reason.CANT_USE)
-                                p.playSound(p.location,Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
+                                p.playSound(sound(Key.key("entity.player.levelup"), Source.PLAYER,1F, 1F))
                                 if (after == null) p.msg("$score 점") else after(score)
                             })
                         })

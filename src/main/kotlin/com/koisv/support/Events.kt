@@ -5,6 +5,8 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import hazae41.minecraft.kutils.bukkit.msg
 import hazae41.minecraft.kutils.textOf
+import net.kyori.adventure.key.Key
+import net.kyori.adventure.sound.Sound.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
@@ -455,7 +457,12 @@ class Events : Listener {
         if (ul != 0) {
             t.msg("$typetext §7≫ §aLevel Up! Lv.$cl -> Lv.${cl + ul}")
             t.playSound(
-                t.location, Sound.ENTITY_PLAYER_LEVELUP, (1.0).toFloat(), (1.0).toFloat()
+                sound(
+                    Key.key("entity.player.levelup"),
+                    Source.PLAYER,
+                    1F,
+                    1F
+                )
             )
             val ts = when (type) {
                 "fisher" -> "Fish"
@@ -492,7 +499,12 @@ class Events : Listener {
                     }
                     econ?.depositPlayer(e.player, coin.toDouble())
                     e.player.playSound(
-                        e.player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, (1.0).toFloat(), (1.0).toFloat()
+                        sound(
+                            Key.key("entity.experience_orb.pickup"),
+                            Source.PLAYER,
+                            1F,
+                            1F
+                        )
                     )
                     e.player.sendActionBar(
                         Component.text().content(
@@ -512,7 +524,12 @@ class Events : Listener {
                     }
                     econ?.depositPlayer(e.player, (coin * 10000).toDouble())
                     e.player.playSound(
-                        e.player.location, Sound.ENTITY_PLAYER_LEVELUP, (1.0).toFloat(), (1.0).toFloat()
+                        sound(
+                            Key.key("entity.player.levelup"),
+                            Source.PLAYER,
+                            1F,
+                            1F
+                        )
                     )
                     e.player.sendActionBar(
                         Component.text().content(
@@ -539,9 +556,7 @@ class Events : Listener {
                     tm.lore(tl)
                     culture.itemMeta = tm
                     item.itemStack = culture
-                    e.player.playSound(
-                        e.player.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, (1.0).toFloat(), (0.7).toFloat()
-                    )
+                    e.player.playSound(sound(Key.key("ui.toast.challenge_complete"), Source.PLAYER,1F, 0.7F))
                     e.player.msg(
                         textOf("엄청난 일이 일어난 듯 합니다...?")
                     )
@@ -611,9 +626,7 @@ class Events : Listener {
                                     )
                             )
                         }
-                        e.player.playSound(
-                            e.player.location, Sound.ENTITY_PLAYER_LEVELUP, (1.0).toFloat(), (0.5).toFloat()
-                        )
+                        e.player.playSound(sound(Key.key("entity.player.levelup"), Source.PLAYER,1F, 0.5F))
                     }
                     val ca = item.itemStack
                     val cm = ca.itemMeta
@@ -1054,13 +1067,13 @@ class Events : Listener {
         amount: Int
     ) {
         p.inventory.setItemInMainHand(null)
-        p.playSound(p.location,Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F)
+        p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,1F, 1F))
         p.msg("§e어부 §7≫ §f아니 이건..?!")
         Timer().schedule(timerTask {
-            p.playSound(p.location,Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+            p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
             p.msg("§e어부 §7≫ §f말로만 듣던 고대의 보물..!")
             Timer().schedule(timerTask {
-                p.playSound(p.location,Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+                p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
                 val scap = Math.random() * 100
                 val value: Int = when {
                     scap >= 50 -> {
@@ -1079,7 +1092,7 @@ class Events : Listener {
                         ((75000 + Math.random() * (125000-75000)) * amount).toInt()
                     }
                 }
-                p.playSound(p.location,Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+                p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
                 p.msg("§e어부 §7≫ §f${value}원에 살게요!")
                 econ?.depositPlayer(p,value.toDouble())
             }, 2000L)
@@ -1091,13 +1104,13 @@ class Events : Listener {
         amount: Int
     ) {
         p.inventory.setItemInMainHand(null)
-        p.playSound(p.location,Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+        p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
         p.msg("§e어부 §7≫ §f이걸 지금..")
         Timer().schedule(timerTask {
-            p.playSound(p.location,Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+            p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
             p.msg("§e어부 §7≫ §f받아달라는 건가요..?")
             Timer().schedule(timerTask {
-                p.playSound(p.location,Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+                p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
                 val scap = Math.random() * 100
                 val value: Int = when {
                     scap >= 50 -> {
@@ -1113,7 +1126,7 @@ class Events : Listener {
                         ((500 + Math.random() * (1000-500)) * amount).toInt()
                     }
                 }
-                p.playSound(p.location,Sound.ENTITY_ITEM_PICKUP, 1F, 1F)
+                p.playSound(sound(Key.key("entity.item.pickup"), Source.PLAYER,1F, 1F))
                 p.msg("§e어부 §7≫ §f${value}원에 드리죠 뭐.")
                 econ?.depositPlayer(p,value.toDouble())
             }, 2000L)
