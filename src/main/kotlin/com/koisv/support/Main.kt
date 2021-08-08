@@ -1,9 +1,6 @@
 package com.koisv.support
 
-import com.koisv.support.commands.Game
-import com.koisv.support.commands.Menu
-import com.koisv.support.commands.Reload
-import com.koisv.support.commands.StatManage
+import com.koisv.support.commands.*
 import hazae41.minecraft.kutils.get
 import io.github.monun.kommand.kommand
 import net.milkbowl.vault.chat.Chat
@@ -105,6 +102,12 @@ class Main : JavaPlugin() {
             }
             register("미니게임") {
                 Game.register(this)
+            }
+            register("test") {
+                requires { hasPermission(4,"admin.test") }
+                executes {
+                    Events.test()
+                }
             }
         }
     }

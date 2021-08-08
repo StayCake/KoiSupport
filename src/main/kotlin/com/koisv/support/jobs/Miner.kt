@@ -2,9 +2,12 @@ package com.koisv.support.jobs
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
+import com.github.stefvanschie.inventoryframework.gui.type.FurnaceGui
+import com.github.stefvanschie.inventoryframework.gui.type.GrindstoneGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.koisv.support.Main
 import com.koisv.support.tools.Shops
+import hazae41.minecraft.kutils.bukkit.msg
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
@@ -14,6 +17,7 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.Repairable
 
 class Miner {
     companion object {
@@ -32,6 +36,20 @@ class Miner {
             Material.GOLD_ORE,
             Material.ANCIENT_DEBRIS
         )
+
+        private fun repair(p: Player) : GrindstoneGui {
+            val main = GrindstoneGui("도구 수리하기")
+            main.setOnTopClick {
+                if (it.slot == 1) {
+                    if (it.inventory.contents[0] is Repairable) {
+                        p.msg(it.inventory.contents[0].toString())
+                        p.msg(it.inventory.contents[1].toString())
+                        p.msg(it.inventory.contents[2].toString())
+                    }
+                }
+            }
+            return main
+        }
 
         fun minegui(p: Player) : ChestGui {
             val mineShop = ChestGui(3,"§b광산용품 상점")
@@ -79,7 +97,7 @@ class Miner {
             ) {
                 val pl = it.whoClicked as Player
                 pl.closeInventory(InventoryCloseEvent.Reason.OPEN_NEW)
-                //repair(pl).show(pl)
+                repair(pl).show(pl)
             }
             val chest = listOf(
                 null, null, null, null, rp, null, null, null, null,
@@ -101,10 +119,18 @@ class Miner {
             return mineShop
         }
 
-        fun getMineCost(item : Material) : Int {
+        fun getMine1Cost(item : Material) : Int {
             return when (item) {
                 Material.COBBLESTONE -> 500
                 Material.COAL -> 3700
+                else -> 0
+            }
+        }
+        fun getMine2Cost(item : Material) : Int {
+            return when (item) {
+                Material.COBBLESTONE -> 300
+                Material.COAL -> 2200
+                Material.LAPIS_LAZULI -> 3600
                 else -> 0
             }
         }
