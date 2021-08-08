@@ -6,7 +6,7 @@ import org.bukkit.entity.Player
 class Farmer {
     companion object {
         fun farmgui(p: Player) : ChestGui {
-            val farmShop = ChestGui(6, "농산품 상점")
+            val farmShop = ChestGui(3, "농산품 상점")
             farmShop.title = p.customName.toString()
             return farmShop
         }

@@ -1,6 +1,6 @@
 name: KoiSupport
 main: com.koisv.support.Main
-version: 0.51-SNAPSHOT
+version: 0.52-SNAPSHOT
 api-version: 1.17
 depend: [Kotlin]
 load: POSTWORLD

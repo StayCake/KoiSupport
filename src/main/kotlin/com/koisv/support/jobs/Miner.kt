@@ -129,6 +129,15 @@ class Miner {
         fun getMine2Cost(item : Material) : Int {
             return when (item) {
                 Material.COBBLESTONE -> 300
+                Material.COAL -> 1500
+                Material.RAW_COPPER -> 1700
+                Material.LAPIS_LAZULI -> 1200
+                else -> 0
+            }
+        }
+        fun getMine3Cost(item : Material) : Int {
+            return when (item) {
+                Material.COBBLESTONE -> 300
                 Material.COAL -> 2200
                 Material.LAPIS_LAZULI -> 3600
                 else -> 0

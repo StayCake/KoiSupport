@@ -75,6 +75,7 @@ class Main : JavaPlugin() {
             server.pluginManager.disablePlugin(this)
             return
         }
+
         setupChat()
         println(String.format("[%s] - 가동 시작!", description.name))
 

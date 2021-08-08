@@ -284,20 +284,21 @@ class Events : Listener {
         if (e.player.gameMode != GameMode.CREATIVE) {
             val p = e.player
             if (Miner.nonexpore.contains(e.block.type)) {
-                when (e.block.type) {
-                    Material.COPPER_ORE -> {
-                        e.expToDrop = round(0.9 + Math.random() * (2.0 - 0.9)).toInt()
-                    }
-                    Material.IRON_ORE -> {
-                        e.expToDrop = 1
-                    }
-                    Material.GOLD_ORE -> {
-                        e.expToDrop = 1
-                    }
-                    Material.ANCIENT_DEBRIS -> {
-                        e.expToDrop = round(5 + Math.random() * (10 - 5)).toInt()
-                    }
-                    else -> {
+                if (e.block.isValidTool(p.inventory.itemInOffHand) || e.block.isValidTool(p.inventory.itemInMainHand)) {
+                    when (e.block.type) {
+                        Material.COPPER_ORE -> {
+                            e.expToDrop = round(0.9 + Math.random() * (2.0 - 0.9)).toInt()
+                        }
+                        Material.IRON_ORE -> {
+                            e.expToDrop = 1
+                        }
+                        Material.GOLD_ORE -> {
+                            e.expToDrop = 1
+                        }
+                        Material.ANCIENT_DEBRIS -> {
+                            e.expToDrop = round(5 + Math.random() * (10 - 5)).toInt()
+                        }
+                        else -> {}
                     }
                 }
             }
@@ -330,7 +331,7 @@ class Events : Listener {
                         gui.show(e.player)
                     }
                 }
-                "§7동굴 광부" -> {
+                "§7광부" -> {
                     if (!e.player.isSneaking) {
                         e.player.msg(
                             """
@@ -344,22 +345,22 @@ class Events : Listener {
                         gui.show(e.player)
                     }
                 }
-                "§7폐광 광부" -> {
+                "§7동굴 광부" -> {
                     e.player.msg(
                         """
                         |§7광부 §7≫ §f안녕하신가!
                         |§7광부 §7≫ §f이쯤까지 왔으니 이곳을 잘 알지 않는가.
-                        |§7광부 §7≫ §f여기서부턴 물건 값이 달라진다는 것만 잘 알아두고
+                        |§7광부 §7≫ §f여기서부턴 물건 값이 달라진다는 것만 잘 알아두고,
                         |§7광부 §7≫ §f이젠 불러만 주게.""".trimMargin()
                     )
                     val gui = Miner.minegui(e.player)
                     gui.show(e.player)
                 }
-                "§7심층 광부" -> {
+                "§7지하 광부" -> {
                     val gui = Miner.minegui(e.player)
                     gui.show(e.player)
                 }
-                "§7광산 로봇" -> {
+                "§7심층 광부" -> {
                     val gui = Miner.minegui(e.player)
                     gui.show(e.player)
                 }
@@ -428,7 +429,7 @@ class Events : Listener {
                         }
                     }
                 }
-                "${ChatColor.GRAY}동굴 광부" -> {
+                "${ChatColor.GRAY}광부" -> {
                     target = "§7광부"
                     if (p.isSneaking) {
                         val i : Inventory = p.inventory
@@ -449,7 +450,7 @@ class Events : Listener {
                         finalcost += if (mine) (cost * amt * 1.05).toInt() else cost * amt
                     }
                 }
-                "${ChatColor.GRAY}폐광 광부" -> {
+                "${ChatColor.GRAY}동굴 광부" -> {
                     target = "§7광부"
                     if (p.isSneaking) {
                         val i : Inventory = p.inventory
