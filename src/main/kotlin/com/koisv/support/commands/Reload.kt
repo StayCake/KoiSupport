@@ -33,6 +33,7 @@ object Reload {
                 val p = sender as Player
                 getInstance().config.load(getInstance().dataFolder["config.yml"])
                 getStats().load(getStatsloc())
+                Main.shop.load(getInstance().dataFolder["data"]["shop.yml"])
                 p.sendMessage("리로드 완료!")
                 p.playSound(
                     net.kyori.adventure.sound.Sound.sound(

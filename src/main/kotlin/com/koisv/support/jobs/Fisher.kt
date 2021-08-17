@@ -71,17 +71,17 @@ class Fisher {
             fishShop.setOnGlobalDrag {
                 it.isCancelled = true
             }
-            val gmi = Shops.shopitem(p,0,"낚시대",50000,"낚시의 기본.","Fish", Material.FISHING_ROD)
-            val sl1 = Shops.enchantshopitem(p,3, Enchantment.LUCK,1,"행운 I",10000,"보물을 낚고 싶은가?","Fish",listOf(Material.FISHING_ROD))
-            val sl2 = Shops.enchantshopitem(p,5, Enchantment.LUCK,2,"행운 II",24000,"욕심이 생기지 않는가?","Fish",listOf(Material.FISHING_ROD))
-            val sl3 = Shops.enchantshopitem(p,7, Enchantment.LUCK,3,"행운 III",50000,"운의 끝을 보고 싶은가?","Fish",listOf(Material.FISHING_ROD))
-            val ub1 = Shops.enchantshopitem(p,8, Enchantment.DURABILITY,1,"내구성 I",20000,"단단함의 기초.","Fish",listOf(Material.FISHING_ROD))
-            val ub2 = Shops.enchantshopitem(p,10, Enchantment.DURABILITY,2,"내구성 II",44000,"견고함의 중점.","Fish",listOf(Material.FISHING_ROD))
-            val ub3 = Shops.enchantshopitem(p,13, Enchantment.DURABILITY,3,"내구성 III",96000,"전문가의 손길.","Fish",listOf(Material.FISHING_ROD))
-            val bt1 = Shops.enchantshopitem(p,15, Enchantment.LURE,1,"미끼 I",22000,"숙련가의 가호가 느껴진다.","Fish",listOf(Material.FISHING_ROD))
-            val bt2 = Shops.enchantshopitem(p,17, Enchantment.LURE,2,"미끼 II",54000,"전문가의 기운이 느껴진다.","Fish",listOf(Material.FISHING_ROD))
-            val bt3 = Shops.enchantshopitem(p,20, Enchantment.LURE,3,"미끼 III",120000,"장인이 함께하는 듯 하다.","Fish",listOf(Material.FISHING_ROD))
-            val md = Shops.enchantshopitem(p,30, Enchantment.MENDING,1,"수선",500000,"낚시의 정점.","Fish",listOf(Material.FISHING_ROD))
+            val gmi = Shops.shopItem(p,0,"낚시대",50000,"낚시의 기본.","Fish", Material.FISHING_ROD)
+            val sl1 = Shops.shopItem(p,3, Enchantment.LUCK,1,"행운 I",10000,"보물을 낚고 싶은가?","Fish",listOf(Material.FISHING_ROD))
+            val sl2 = Shops.shopItem(p,5, Enchantment.LUCK,2,"행운 II",24000,"욕심이 생기지 않는가?","Fish",listOf(Material.FISHING_ROD))
+            val sl3 = Shops.shopItem(p,7, Enchantment.LUCK,3,"행운 III",50000,"운의 끝을 보고 싶은가?","Fish",listOf(Material.FISHING_ROD))
+            val ub1 = Shops.shopItem(p,8, Enchantment.DURABILITY,1,"내구성 I",20000,"단단함의 기초.","Fish",listOf(Material.FISHING_ROD))
+            val ub2 = Shops.shopItem(p,10, Enchantment.DURABILITY,2,"내구성 II",44000,"견고함의 중점.","Fish",listOf(Material.FISHING_ROD))
+            val ub3 = Shops.shopItem(p,13, Enchantment.DURABILITY,3,"내구성 III",96000,"전문가의 손길.","Fish",listOf(Material.FISHING_ROD))
+            val bt1 = Shops.shopItem(p,15, Enchantment.LURE,1,"미끼 I",22000,"숙련가의 가호가 느껴진다.","Fish",listOf(Material.FISHING_ROD))
+            val bt2 = Shops.shopItem(p,17, Enchantment.LURE,2,"미끼 II",54000,"전문가의 기운이 느껴진다.","Fish",listOf(Material.FISHING_ROD))
+            val bt3 = Shops.shopItem(p,20, Enchantment.LURE,3,"미끼 III",120000,"장인이 함께하는 듯 하다.","Fish",listOf(Material.FISHING_ROD))
+            val md = Shops.shopItem(p,30, Enchantment.MENDING,1,"수선",500000,"낚시의 정점.","Fish",listOf(Material.FISHING_ROD))
             val chest = listOf(
                 null, null, sl1, null, ub1, null, bt1, null, null,
                 gmi, null, sl2, null, ub2, null, bt2, null, md,

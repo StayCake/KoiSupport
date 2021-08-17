@@ -13,7 +13,8 @@ dependencies {
     compileOnly(kotlin("stdlib")) // Kotlin
     implementation("com.github.stefvanschie.inventoryframework:IF:+")
     implementation("com.github.hazae41:mc-kutils:+")
-    compileOnly("io.github.monun:kommand-api:+")
+    compileOnly(files("/libs/CustomEnchant-dist.jar"))
+    compileOnly("io.github.monun:kommand-api:2.6.3")
     compileOnly("com.github.milkbowl:VaultAPI:+")
     compileOnly("io.papermc.paper:paper-api:+") // Paper Latest
 }

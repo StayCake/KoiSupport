@@ -1,13 +1,18 @@
 package com.koisv.support
 
-import com.koisv.support.commands.*
+import com.koisv.support.commands.Game
+import com.koisv.support.commands.Menu
+import com.koisv.support.commands.Reload
+import com.koisv.support.commands.StatManage
 import hazae41.minecraft.kutils.get
 import io.github.monun.kommand.kommand
 import net.milkbowl.vault.chat.Chat
 import net.milkbowl.vault.economy.Economy
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Color
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
@@ -25,6 +30,8 @@ class Main : JavaPlugin() {
         lateinit var statsloc: File
             private set
         lateinit var colors: (ChatColor) -> Color
+            private set
+        lateinit var shop: YamlConfiguration
             private set
     }
 
@@ -69,9 +76,12 @@ class Main : JavaPlugin() {
                 else -> Color.WHITE
             }
         }
-
-        if (!setupEconomy()) {
-            println(String.format("[%s] - Vault가 감지되지 않았습니다!", description.name))
+        fun getCC() : Plugin? {
+            return Bukkit.getPluginManager().getPlugin("CustomEnchants")
+        }
+        if (!setupEconomy() && getCC() == null) {
+            if (!setupEconomy()) println(String.format("[%s] - Vault가 감지되지 않았습니다!", description.name))
+            if (getCC() == null) println(String.format("[%s] - CustomEnchants가 감지되지 않았습니다!", description.name))
             server.pluginManager.disablePlugin(this)
             return
         }
@@ -90,6 +100,13 @@ class Main : JavaPlugin() {
         if (!dataFolder["data"]["stats.yml"].canRead()) {
             dataFolder["data"].mkdir()
             stats.save(statsloc)
+        }
+
+        shop = YamlConfiguration.loadConfiguration(dataFolder["data"]["shop.yml"])
+
+        if (!dataFolder["data"]["shop.yml"].canRead()) {
+            dataFolder["data"].mkdir()
+            shop.save(dataFolder["data"]["shop.yml"])
         }
         kommand {
             register("ks") {

@@ -1,11 +1,18 @@
 package com.koisv.support
 
+import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
+import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.koisv.support.jobs.Farmer
 import com.koisv.support.jobs.Fisher
 import com.koisv.support.jobs.Miner
+import com.koisv.support.jobs.WoodCutter.Companion.axe
 import com.koisv.support.tools.Instance.Companion.config
+import com.koisv.support.tools.Instance.Companion.customshop
+import com.koisv.support.tools.Shops.Companion.shopItem
 import com.koisv.support.tools.Stats
+import hazae41.minecraft.kutils.bukkit.keys
 import hazae41.minecraft.kutils.bukkit.msg
+import hazae41.minecraft.kutils.bukkit.section
 import hazae41.minecraft.kutils.textOf
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound.Source
@@ -21,7 +28,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.block.BlockPistonEvent
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerFishEvent
@@ -29,6 +36,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
+import kotlin.math.ceil
 import kotlin.math.round
 
 class Events : Listener {
@@ -38,6 +46,26 @@ class Events : Listener {
             val inv = Bukkit.createInventory(null,InventoryType.CREATIVE)
             Bukkit.getOnlinePlayers().forEach {
                 it.openInventory(inv)
+            }
+        }
+    }
+
+    @EventHandler
+    fun woodcutter(e: BlockPlaceEvent) {
+        if (e.blockReplacedState.type == Material.OXIDIZED_CUT_COPPER_SLAB) {
+            val mh = e.player.inventory.itemInMainHand
+            val oh = e.player.inventory.itemInOffHand
+            when {
+                axe.contains(mh.type) -> {
+                    if (oh == ItemStack(Material.DIAMOND,oh.amount)) {
+                        e.isCancelled = true
+                        oh.amount -= 1
+                        mh.addUnsafeEnchantment(Enchantment.DIG_SPEED, (mh.enchantments[Enchantment.DIG_SPEED] ?: 0) + 1)
+                        e.player.msg("강화!")
+                    } else {
+                        e.player.msg("강화 재료가 없습니다.")
+                    }
+                }
             }
         }
     }
@@ -315,6 +343,7 @@ class Events : Listener {
     @EventHandler
     fun interactNPC(e: PlayerInteractEntityEvent) {
         val eh: EquipmentSlot = e.hand
+        val custom = customshop.keys.contains(e.rightClicked.name)
         if (eh == EquipmentSlot.HAND) {
             when (e.rightClicked.name) {
                 "§b어부" -> {
@@ -376,6 +405,31 @@ class Events : Listener {
                     } else {
                         val gui = Farmer.farmgui(e.player)
                         gui.show(e.player)
+                    }
+                }
+                else -> {
+                    if (custom) {
+                        val t = customshop.section(e.rightClicked.name)?.getKeys(false)
+                        println(t)
+                        if (t != null) {
+                            val cShop = ChestGui(ceil((t.size.toFloat()) /9).toInt(), e.rightClicked.name)
+                            val cPane = StaticPane(9,ceil((t.size.toFloat()) /9).toInt())
+                            var index = 0
+                            var line = 0
+                            t.forEach { m ->
+                                if (index > 8) {
+                                    index = 0
+                                    line++
+                                }
+                                val tm = Material.getMaterial(m)
+                                if (tm != null) {
+                                    cPane.addItem(shopItem(e.player,0,null, customshop.section(e.rightClicked.name)?.getInt(m) ?: 0,null,"shop",tm,null,e.player.isSneaking),index,line)
+                                }
+                                index++
+                            }
+                            cShop.addPane(cPane)
+                            cShop.show(e.player)
+                        }
                     }
                 }
             }
