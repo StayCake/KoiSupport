@@ -100,7 +100,6 @@ class Shops {
             type: String,
             Item: Material,
             damage: Int? = 0,
-            shift: Boolean? = false,
         ): GuiItem {
             val shopStat = convert(type,p,originalPrice)
             val price = shopStat[0]
@@ -169,7 +168,7 @@ class Shops {
                 it.isCancelled = true
                 val lvf : Boolean = playerLV >= reqLV
                 when {
-                    lvf -> buyMessage(p,priceInt,main,who,shift)
+                    lvf -> buyMessage(p,priceInt,main,who,it.isShiftClick)
                     else -> p.msg("$who §7≫ §f레벨이 부족합니다.")
                 }
             }

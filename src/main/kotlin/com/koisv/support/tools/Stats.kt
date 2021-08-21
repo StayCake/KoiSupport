@@ -16,16 +16,16 @@ class Stats {
         fun convert(type: String, target: Player, price: Int) : List<String>{
             return when (type){
                 "Fish" -> {
-                    listOf(if (target.hasPermission("fisher.fish")) "${price * 0.95}원 [어부 할인가]" else "${price}원","§e어부","낚시")
+                    listOf(if (target.hasPermission("fisher.fish")) "${(price * 0.95).toInt()}원 [어부 할인가]" else "${price}원","§e어부","낚시")
                 }
                 "Farm" -> {
-                    listOf(if (target.hasPermission("farmer.farm")) "${price * 0.95}원 [농부 할인가]" else "${price}원","§a농부","농사")
+                    listOf(if (target.hasPermission("farmer.farm")) "${(price * 0.95).toInt()}원 [농부 할인가]" else "${price}원","§a농부","농사")
                 }
                 "Mine" -> {
-                    listOf(if (target.hasPermission("miner.mine")) "${price * 0.95}원 [광부 할인가]" else "${price}원","§b광부","채광")
+                    listOf(if (target.hasPermission("miner.mine")) "${(price * 0.95).toInt()}원 [광부 할인가]" else "${price}원","§b광부","채광")
                 }
                 "shop" -> {
-                    listOf(if (target.hasPermission("admin.sale")) "${price * 0.95}원 [상점 할인가]" else "${price}원","§1상인","")
+                    listOf(if (target.hasPermission("admin.sale")) "${(price * 0.95).toInt()}원 [상점 할인가]" else "${price}원","§1상인","")
                 }
                 else -> {
                     listOf("0","null","null")

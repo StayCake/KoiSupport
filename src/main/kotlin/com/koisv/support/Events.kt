@@ -374,7 +374,7 @@ class Events : Listener {
                         gui.show(e.player)
                     }
                 }
-                "§7동굴 광부" -> {
+                "§7협곡 광부" -> {
                     e.player.msg(
                         """
                         |§7광부 §7≫ §f안녕하신가!
@@ -385,7 +385,7 @@ class Events : Listener {
                     val gui = Miner.minegui(e.player)
                     gui.show(e.player)
                 }
-                "§7지하 광부" -> {
+                "§7폐광 광부" -> {
                     val gui = Miner.minegui(e.player)
                     gui.show(e.player)
                 }
@@ -403,7 +403,7 @@ class Events : Listener {
                         |§e농부 §7≫ §f농산물만 줘. 웅크리고 우클릭해서 물건을 봐도 좋고!""".trimMargin()
                         )
                     } else {
-                        val gui = Farmer.farmgui(e.player)
+                        val gui = Farmer.farmGui(e.player)
                         gui.show(e.player)
                     }
                 }
@@ -423,7 +423,7 @@ class Events : Listener {
                                 }
                                 val tm = Material.getMaterial(m)
                                 if (tm != null) {
-                                    cPane.addItem(shopItem(e.player,0,null, customshop.section(e.rightClicked.name)?.getInt(m) ?: 0,null,"shop",tm,null,e.player.isSneaking),index,line)
+                                    cPane.addItem(shopItem(e.player,0,null, customshop.section(e.rightClicked.name)?.getInt(m) ?: 0,null,"shop",tm,null),index,line)
                                 }
                                 index++
                             }
@@ -500,11 +500,11 @@ class Events : Listener {
                     } else {
                         val amt = pmh.amount
                         val cost = Miner.getMine1Cost(pmh.type)
-                        p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
+                        if (cost != 0) p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
                         finalcost += if (mine) (cost * amt * 1.05).toInt() else cost * amt
                     }
                 }
-                "${ChatColor.GRAY}동굴 광부" -> {
+                "${ChatColor.GRAY}협곡 광부" -> {
                     target = "§7광부"
                     if (p.isSneaking) {
                         val i : Inventory = p.inventory
@@ -521,7 +521,70 @@ class Events : Listener {
                     } else {
                         val amt = pmh.amount
                         val cost = Miner.getMine2Cost(pmh.type)
-                        p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
+                        if (cost != 0) p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
+                        finalcost += if (mine) (cost * amt * 1.05).toInt() else cost * amt
+                    }
+                }
+                "${ChatColor.GRAY}폐광 광부" -> {
+                    target = "§7광부"
+                    if (p.isSneaking) {
+                        val i : Inventory = p.inventory
+                        i.forEach {
+                            if (it != null) {
+                                val mh: ItemStack = it
+                                val mi = i.contents.indexOf(mh)
+                                val amt = mh.amount
+                                val cost = Miner.getMine3Cost(mh.type)
+                                if (cost != 0) p.inventory.setItem(mi,ItemStack(Material.AIR))
+                                finalcost += if (mine) (cost * amt * 1.05).toInt() else (cost * amt)
+                            }
+                        }
+                    } else {
+                        val amt = pmh.amount
+                        val cost = Miner.getMine3Cost(pmh.type)
+                        if (cost != 0) p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
+                        finalcost += if (mine) (cost * amt * 1.05).toInt() else cost * amt
+                    }
+                }
+                "${ChatColor.GRAY}심층 광부" -> {
+                    target = "§7광부"
+                    if (p.isSneaking) {
+                        val i : Inventory = p.inventory
+                        i.forEach {
+                            if (it != null) {
+                                val mh: ItemStack = it
+                                val mi = i.contents.indexOf(mh)
+                                val amt = mh.amount
+                                val cost = Miner.getMine4Cost(mh.type)
+                                if (cost != 0) p.inventory.setItem(mi,ItemStack(Material.AIR))
+                                finalcost += if (mine) (cost * amt * 1.05).toInt() else (cost * amt)
+                            }
+                        }
+                    } else {
+                        val amt = pmh.amount
+                        val cost = Miner.getMine4Cost(pmh.type)
+                        if (cost != 0) p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
+                        finalcost += if (mine) (cost * amt * 1.05).toInt() else cost * amt
+                    }
+                }
+                "${ChatColor.GREEN}농부" -> {
+                    target = "§e농부"
+                    if (p.isSneaking) {
+                        val i : Inventory = p.inventory
+                        i.forEach {
+                            if (it != null) {
+                                val mh: ItemStack = it
+                                val mi = i.contents.indexOf(mh)
+                                val amt = mh.amount
+                                val cost = Farmer.getCropCost(mh.type)
+                                if (cost != 0) p.inventory.setItem(mi,ItemStack(Material.AIR))
+                                finalcost += if (mine) (cost * amt * 1.05).toInt() else (cost * amt)
+                            }
+                        }
+                    } else {
+                        val amt = pmh.amount
+                        val cost = Farmer.getCropCost(pmh.type)
+                        if (cost != 0) p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
                         finalcost += if (mine) (cost * amt * 1.05).toInt() else cost * amt
                     }
                 }
