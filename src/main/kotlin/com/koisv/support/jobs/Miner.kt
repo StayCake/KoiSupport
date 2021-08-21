@@ -2,21 +2,28 @@ package com.koisv.support.jobs
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
-import com.github.stefvanschie.inventoryframework.gui.type.GrindstoneGui
+import com.github.stefvanschie.inventoryframework.gui.type.FurnaceGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.koisv.support.Main
+import com.koisv.support.econ
+import com.koisv.support.tools.Instance
 import com.koisv.support.tools.Shops.Companion.shopItem
+import com.koisv.support.tools.Stats
+import com.koisv.support.ui.GameUI
 import hazae41.minecraft.kutils.bukkit.msg
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.ChatColor
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.Repairable
+import org.bukkit.inventory.meta.Damageable
+import kotlin.math.round
 
 class Miner {
     companion object {
@@ -28,31 +35,132 @@ class Miner {
             Material.DIAMOND_PICKAXE,
             Material.NETHERITE_PICKAXE
         )
-
-        val nonexpore = listOf(
+        private val nonExpOre = listOf(
             Material.COPPER_ORE,
             Material.IRON_ORE,
             Material.GOLD_ORE,
             Material.ANCIENT_DEBRIS
         )
-
-        private fun repair(p: Player) : GrindstoneGui {
-            val main = GrindstoneGui("도구 수리하기")
-            main.setOnTopClick {
-                println(it.slot)
-                println(it.cursor)
-                if (it.slot == 1) {
-                    if (it.cursor is Repairable) {
-                        p.msg(it.inventory.contents[0].toString())
-                        p.msg(it.inventory.contents[1].toString())
-                        p.msg(it.inventory.contents[2].toString())
+        private fun repair(p: Player) : FurnaceGui {
+            val main = FurnaceGui("도구 수리하기")
+            main.setOnBottomClick {
+                if (it.isShiftClick) it.isCancelled = true
+            }
+            main.setOnTopClick { its ->
+                its.isCancelled = true
+                if (its.slot == 0) {
+                    if (its.cursor?.itemMeta is Damageable) {
+                        var save = its.cursor as ItemStack
+                        val inPane = StaticPane(1,1)
+                        val fuelPane = StaticPane(1,1)
+                        val reItem = GuiItem(its.cursor as ItemStack)
+                        val repairBook = GuiItem(
+                            ItemStack(Material.ANVIL).apply {
+                                val level = Stats.getStat(p,"Mine")
+                                val cost = when {
+                                    level > 40 -> 4500000
+                                    level > 25 -> 1500000
+                                    level > 15 -> 600000
+                                    level > 7 -> 150000
+                                    else -> if (its.cursor?.type == Material.GOLDEN_PICKAXE) 25000 else 45000
+                                }
+                                itemMeta = itemMeta.apply {
+                                    displayName(
+                                        Component.text("수리하기")
+                                            .decoration(TextDecoration.ITALIC,false)
+                                    )
+                                    lore(
+                                        if (econ?.has(p,cost.toDouble()) == true) {
+                                            listOf(
+                                                Component.text("수리 비용 : $cost 원")
+                                                    .color(TextColor.color(255, 255, 255))
+                                                    .decoration(TextDecoration.ITALIC,false),
+                                                Component.text("수리 미니게임을 하려면 클릭하세요.")
+                                                    .color(TextColor.color(255, 255, 255))
+                                                    .decoration(TextDecoration.ITALIC,false),
+                                                Component.text("점수에 따라 수리 정도가 달라집니다.")
+                                                    .color(TextColor.color(255, 255, 255))
+                                                    .decoration(TextDecoration.ITALIC,false),
+                                                Component.text("연습게임은 /미니게임 으로 할 수 있습니다.")
+                                                    .color(TextColor.color(255, 255, 255))
+                                                    .decoration(TextDecoration.ITALIC,false)
+                                            )
+                                        } else {
+                                            listOf(
+                                                Component.text("수리 비용 : $cost 원")
+                                                    .color(TextColor.color(255, 0, 0))
+                                                    .decorate(TextDecoration.UNDERLINED)
+                                                    .decoration(TextDecoration.ITALIC,false),
+                                                Component.text("수리 비용이 부족합니다.")
+                                                    .color(TextColor.color(255, 255, 255))
+                                                    .decoration(TextDecoration.ITALIC,false)
+                                            )
+                                        }
+                                    )
+                                }
+                            }
+                        ) {
+                            val level = Stats.getStat(p,"Mine")
+                            val cost = when {
+                                level > 40 -> 4500000
+                                level > 25 -> 1500000
+                                level > 15 -> 600000
+                                level > 7 -> 150000
+                                else -> if (save.type == Material.GOLDEN_PICKAXE) 25000 else 45000
+                            }
+                            if (econ?.has(p,cost.toDouble()) == true) {
+                                econ?.withdrawPlayer(p,cost.toDouble())
+                                GameUI.game(p) { score ->
+                                    val apply = when {
+                                        level > 40 -> score * 1.5
+                                        level > 25 -> score
+                                        level > 15 -> score * 0.2
+                                        level > 7 -> score * 0.1
+                                        else -> score * 0.05
+                                    }
+                                    p.inventory.addItem(save.apply {
+                                        itemMeta = itemMeta.apply {
+                                            val d = this as Damageable
+                                            if (d.damage < apply.toInt()) {
+                                                d.damage = 0
+                                            } else d.damage -= apply.toInt()
+                                        }
+                                    })
+                                    p.msg("수리 완료!")
+                                }
+                            } else {
+                                p.msg("소지금이 부족합니다.")
+                            }
+                        }
+                        var ex = 0
+                        fuelPane.addItem(repairBook,0,0)
+                        inPane.addItem(reItem,0,0)
+                        reItem.setAction {
+                            if (its.cursor?.type == Material.AIR && ex > 0) {
+                                it.whoClicked.setItemOnCursor(it.currentItem)
+                                inPane.removeItem(0,0)
+                                fuelPane.removeItem(0,0)
+                                main.update()
+                            }
+                            ex++
+                        }
+                        its.whoClicked.setItemOnCursor(null)
+                        main.setOnClose {
+                            if (it.reason != InventoryCloseEvent.Reason.OPEN_NEW) {
+                                p.inventory.addItem(save)
+                                save = ItemStack(Material.AIR)
+                            }
+                        }
+                        main.ingredientComponent.addPane(inPane)
+                        main.fuelComponent.addPane(fuelPane)
+                        main.update()
                     }
                 }
             }
             return main
         }
 
-        fun minegui(p: Player) : ChestGui {
+        fun mineGui(p: Player) : ChestGui {
             val mineShop = ChestGui(3,"§b광산용품 상점")
             mineShop.setOnGlobalClick {
                 if (it.isShiftClick) it.isCancelled = true
@@ -163,6 +271,38 @@ class Miner {
                 Material.EMERALD -> 75000
                 Material.ANCIENT_DEBRIS -> 350000
                 else -> 0
+            }
+        }
+
+        fun expWorks(e: BlockBreakEvent) {
+            if (e.player.gameMode != GameMode.CREATIVE) {
+                val p = e.player
+                if (nonExpOre.contains(e.block.type)) {
+                    if (e.block.isValidTool(p.inventory.itemInOffHand) || e.block.isValidTool(p.inventory.itemInMainHand)) {
+                        when (e.block.type) {
+                            Material.COPPER_ORE -> {
+                                e.expToDrop = round(0.9 + Math.random() * (2.0 - 0.9)).toInt()
+                            }
+                            Material.IRON_ORE -> {
+                                e.expToDrop = 1
+                            }
+                            Material.GOLD_ORE -> {
+                                e.expToDrop = 1
+                            }
+                            Material.ANCIENT_DEBRIS -> {
+                                e.expToDrop = round(5 + Math.random() * (10 - 5)).toInt()
+                            }
+                            else -> {}
+                        }
+                    }
+                }
+                if (e.player.hasPermission("miner.mine")) {
+                    e.expToDrop = (e.expToDrop * Instance.config.getDouble("values.multiplier.miner")).toInt()
+                }
+                if (e.expToDrop > 0) {
+                    Stats.setStat(e.expToDrop, p, "Mine")
+                    Stats.showStat(p, "Mine")
+                }
             }
         }
     }

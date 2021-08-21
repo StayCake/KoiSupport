@@ -11,6 +11,7 @@ import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Color
+import org.bukkit.block.Block
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.RegisteredServiceProvider
@@ -33,6 +34,7 @@ class Main : JavaPlugin() {
             private set
         lateinit var shop: YamlConfiguration
             private set
+        var placeCheck: MutableList<Block> = mutableListOf()
     }
 
     private fun setupEconomy(): Boolean {
@@ -120,12 +122,6 @@ class Main : JavaPlugin() {
             }
             register("미니게임") {
                 Game.register(this)
-            }
-            register("test") {
-                requires { hasPermission(4,"admin.test") }
-                executes {
-                    Events.test()
-                }
             }
         }
     }

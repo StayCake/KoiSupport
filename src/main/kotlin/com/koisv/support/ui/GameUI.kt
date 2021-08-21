@@ -1,4 +1,4 @@
-package com.koisv.support.commands
+package com.koisv.support.ui
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
@@ -163,35 +163,36 @@ class GameUI {
             )
         }
         fun game(p: Player, after: ((score: Int) -> Unit)? = null) {
+            p.closeInventory(InventoryCloseEvent.Reason.OPEN_NEW)
             val ready = ChestGui(5, "§3준비")
-            val countpane = StaticPane(9, 5)
-            countpane.isVisible = true
-            ready.addPane(countpane)
+            val countPane = StaticPane(9, 5)
+            countPane.isVisible = true
+            ready.addPane(countPane)
             ready.show(p)
-            countpane.setOnClick { ck -> ck.isCancelled = true }
-            val thgi = GuiItem(ItemStack(Material.GREEN_STAINED_GLASS_PANE))
-            val twgi = GuiItem(ItemStack(Material.YELLOW_STAINED_GLASS_PANE))
-            val ongi = GuiItem(ItemStack(Material.RED_STAINED_GLASS_PANE))
+            countPane.setOnClick { ck -> ck.isCancelled = true }
+            val thGi = GuiItem(ItemStack(Material.GREEN_STAINED_GLASS_PANE))
+            val twGi = GuiItem(ItemStack(Material.YELLOW_STAINED_GLASS_PANE))
+            val onGi = GuiItem(ItemStack(Material.RED_STAINED_GLASS_PANE))
             val three = listOf(
-                null, null, null, thgi, thgi, thgi, null, null, null,
-                null, null, null, null, null, thgi, null, null, null,
-                null, null, null, thgi, thgi, thgi, null, null, null,
-                null, null, null, null, null, thgi, null, null, null,
-                null, null, null, thgi, thgi, thgi, null, null, null,
+                null, null, null, thGi, thGi, thGi, null, null, null,
+                null, null, null, null, null, thGi, null, null, null,
+                null, null, null, thGi, thGi, thGi, null, null, null,
+                null, null, null, null, null, thGi, null, null, null,
+                null, null, null, thGi, thGi, thGi, null, null, null,
             )
             val two = listOf(
-                null, null, null, twgi, twgi, twgi, null, null, null,
-                null, null, null, null, null, twgi, null, null, null,
-                null, null, null, twgi, twgi, twgi, null, null, null,
-                null, null, null, twgi, null, null, null, null, null,
-                null, null, null, twgi, twgi, twgi, null, null, null,
+                null, null, null, twGi, twGi, twGi, null, null, null,
+                null, null, null, null, null, twGi, null, null, null,
+                null, null, null, twGi, twGi, twGi, null, null, null,
+                null, null, null, twGi, null, null, null, null, null,
+                null, null, null, twGi, twGi, twGi, null, null, null,
             )
             val one = listOf(
-                null, null, null, null, ongi, null, null, null, null,
-                null, null, null, ongi, ongi, null, null, null, null,
-                null, null, null, null, ongi, null, null, null, null,
-                null, null, null, null, ongi, null, null, null, null,
-                null, null, null, ongi, ongi, ongi, null, null, null,
+                null, null, null, null, onGi, null, null, null, null,
+                null, null, null, onGi, onGi, null, null, null, null,
+                null, null, null, null, onGi, null, null, null, null,
+                null, null, null, null, onGi, null, null, null, null,
+                null, null, null, onGi, onGi, onGi, null, null, null,
             )
 
             Bukkit.getScheduler().runTaskAsynchronously(
@@ -204,7 +205,7 @@ class GameUI {
                                 x3 = 0
                                 y3++
                             }
-                            if (gi != null) countpane.addItem(gi, x3, y3)
+                            if (gi != null) countPane.addItem(gi, x3, y3)
                             x3++
                         }
                         ready.update()
@@ -212,7 +213,7 @@ class GameUI {
                     })
                     Thread.sleep(1000)
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
-                        countpane.removeItem(thgi)
+                        countPane.removeItem(thGi)
                         var x2 = 0
                         var y2 = 0
                         two.forEach { gi ->
@@ -220,7 +221,7 @@ class GameUI {
                                 x2 = 0
                                 y2++
                             }
-                            if (gi != null) countpane.addItem(gi, x2, y2)
+                            if (gi != null) countPane.addItem(gi, x2, y2)
                             x2++
                         }
                         ready.update()
@@ -228,7 +229,7 @@ class GameUI {
                     })
                     Thread.sleep(1000)
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
-                        countpane.removeItem(twgi)
+                        countPane.removeItem(twGi)
                         var x1 = 0
                         var y1 = 0
                         one.forEach { gi ->
@@ -236,7 +237,7 @@ class GameUI {
                                 x1 = 0
                                 y1++
                             }
-                            if (gi != null) countpane.addItem(gi, x1, y1)
+                            if (gi != null) countPane.addItem(gi, x1, y1)
                             x1++
                         }
                         ready.update()
@@ -244,18 +245,18 @@ class GameUI {
                     })
                     Thread.sleep(1000)
                     Bukkit.getScheduler().runTask(Main.instance, Runnable {
-                        countpane.removeItem(ongi)
-                        countpane.isVisible = false
+                        countPane.removeItem(onGi)
+                        countPane.isVisible = false
                         ready.update()
                         p.closeInventory(InventoryCloseEvent.Reason.OPEN_NEW)
                         p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,1F, 1F))
 
-                        val gameui = ChestGui(2,"미니게임")
-                        val gamepane = StaticPane(9,2)
-                        gameui.addPane(gamepane)
-                        gameui.show(p)
+                        val gameUI = ChestGui(2,"미니게임")
+                        val gamePane = StaticPane(9,2)
+                        gameUI.addPane(gamePane)
+                        gameUI.show(p)
                         var score = 0
-                        val twoscoretap = GuiItem(
+                        val twoScoreTap = GuiItem(
                             ItemStack(Material.CYAN_STAINED_GLASS_PANE,1).apply {
                                 itemMeta = itemMeta.apply {
                                     displayName(
@@ -280,10 +281,10 @@ class GameUI {
                             score += 30
                             val y = it.slot/9
                             val x = it.slot - y*9
-                            gamepane.removeItem(x,y)
-                            gameui.update()
+                            gamePane.removeItem(x,y)
+                            gameUI.update()
                         }
-                        val twoscore = GuiItem(
+                        val twoScore = GuiItem(
                             ItemStack(Material.CYAN_STAINED_GLASS_PANE,2).apply {
                                 itemMeta = itemMeta.apply {
                                     displayName(
@@ -307,18 +308,18 @@ class GameUI {
                                 score += 30
                                 val y = it.slot/9
                                 val x = it.slot - y*9
-                                gamepane.removeItem(x,y)
-                                gameui.update()
+                                gamePane.removeItem(x,y)
+                                gameUI.update()
                             } else {
                                 it.isCancelled = true
                                 p.playSound(sound(Key.key("entity.experience_orb.pickup"), Source.PLAYER,1F, 0.675F))
                                 val y = it.slot/9
                                 val x = it.slot - y*9
-                                gamepane.addItem(twoscoretap,x,y)
-                                gameui.update()
+                                gamePane.addItem(twoScoreTap,x,y)
+                                gameUI.update()
                             }
                         }
-                        val onescore = GuiItem(
+                        val oneScore = GuiItem(
                             ItemStack(Material.LIME_STAINED_GLASS_PANE).apply {
                                 itemMeta = itemMeta.apply {
                                     displayName(
@@ -334,10 +335,10 @@ class GameUI {
                             score += 10
                             val y = it.slot/9
                             val x = it.slot - y*9
-                            gamepane.removeItem(x,y)
-                            gameui.update()
+                            gamePane.removeItem(x,y)
+                            gameUI.update()
                         }
-                        val minusscore = GuiItem(
+                        val minusScore = GuiItem(
                             ItemStack(Material.TNT).apply {
                                 itemMeta = itemMeta.apply {
                                     displayName(
@@ -353,11 +354,11 @@ class GameUI {
                             score -= 50
                             val y = it.slot/9
                             val x = it.slot - y*9
-                            gamepane.removeItem(x,y)
-                            gameui.update()
+                            gamePane.removeItem(x,y)
+                            gameUI.update()
                         }
                         Bukkit.getScheduler().runTaskAsynchronously(Main.instance, Runnable{
-                            gameui.setOnClose {
+                            gameUI.setOnClose {
                                 Bukkit.getScheduler().runTask(Main.instance, Runnable {
                                     if (it.reason != InventoryCloseEvent.Reason.CANT_USE) {
                                         p.closeInventory()
@@ -371,7 +372,7 @@ class GameUI {
                                 Bukkit.getScheduler().runTask(Main.instance, Runnable {
                                     val ls = 61 - i
                                     if (ls <= 3) p.playSound(sound(Key.key("block.wooden_button.click_on"), Source.PLAYER,1F, 1F))
-                                    gameui.title = "미니게임 | 남은시간 : ${if (ls <= 3) "&c" else ""}${ls}초"
+                                    gameUI.title = "미니게임 | $score 점 | 남은시간 : ${if (ls <= 3) "§c" else ""}${ls}초"
                                 })
                                 val amount = (1 + Math.random() * (3 - 1)).roundToInt()
                                 for (t in 1..amount) {
@@ -383,39 +384,39 @@ class GameUI {
                                             Bukkit.getScheduler().runTaskLater(
                                                 Main.instance,
                                                 Runnable {
-                                                    gamepane.addItem(twoscore, rx, ry)
-                                                    gameui.update()
+                                                    gamePane.addItem(twoScore, rx, ry)
+                                                    gameUI.update()
                                                 }, rd
                                             )
                                             Bukkit.getScheduler().runTaskLater(Main.instance, Runnable {
-                                                gamepane.removeItem(rx,ry)
-                                                gameui.update()
+                                                gamePane.removeItem(rx,ry)
+                                                gameUI.update()
                                             },20L)
                                         }
                                         2 -> {
                                             Bukkit.getScheduler().runTaskLater(
                                                 Main.instance,
                                                 Runnable {
-                                                    gamepane.addItem(onescore, rx, ry)
-                                                    gameui.update()
+                                                    gamePane.addItem(oneScore, rx, ry)
+                                                    gameUI.update()
                                                 }, rd
                                             )
                                             Bukkit.getScheduler().runTaskLater(Main.instance, Runnable {
-                                                gamepane.removeItem(rx,ry)
-                                                gameui.update()
+                                                gamePane.removeItem(rx,ry)
+                                                gameUI.update()
                                             },40L)
                                         }
                                         3 -> {
                                             Bukkit.getScheduler().runTaskLater(
                                                 Main.instance,
                                                 Runnable {
-                                                    gamepane.addItem(minusscore, rx, ry)
-                                                    gameui.update()
+                                                    gamePane.addItem(minusScore, rx, ry)
+                                                    gameUI.update()
                                                 }, rd
                                             )
                                             Bukkit.getScheduler().runTaskLater(Main.instance, Runnable {
-                                                gamepane.removeItem(rx,ry)
-                                                gameui.update()
+                                                gamePane.removeItem(rx,ry)
+                                                gameUI.update()
                                             },60L)
                                         }
                                     }
@@ -423,7 +424,7 @@ class GameUI {
                                 Thread.sleep(
                                     1000)
                             }
-                            if (!Thread.currentThread().isInterrupted) Bukkit.getScheduler().runTask(Main.instance, Runnable {
+                            if (!gameUI.viewers.contains(p)) Bukkit.getScheduler().runTask(Main.instance, Runnable {
                                 p.closeInventory(InventoryCloseEvent.Reason.CANT_USE)
                                 p.playSound(sound(Key.key("entity.player.levelup"), Source.PLAYER,1F, 1F))
                                 if (after == null) p.msg("$score 점") else after(score)

@@ -1,4 +1,4 @@
-package com.koisv.support.commands
+package com.koisv.support.ui
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
@@ -18,14 +18,12 @@ import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Material
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import kotlin.math.ceil
-import kotlin.math.pow
 
 
 class MoneyUI {

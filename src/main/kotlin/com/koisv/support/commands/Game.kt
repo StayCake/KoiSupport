@@ -1,5 +1,6 @@
 package com.koisv.support.commands
 
+import com.koisv.support.ui.GameUI
 import io.github.monun.kommand.node.LiteralNode
 
 object Game {

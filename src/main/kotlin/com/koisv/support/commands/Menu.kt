@@ -1,5 +1,6 @@
 package com.koisv.support.commands
 
+import com.koisv.support.ui.MoneyUI
 import io.github.monun.kommand.node.LiteralNode
 import org.bukkit.entity.Player
 

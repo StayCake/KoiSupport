@@ -3,13 +3,19 @@ package com.koisv.support.jobs
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.koisv.customenchants.Utils.Misc.Companion.hoe
+import com.koisv.support.Main
 import com.koisv.support.tools.Instance.Companion.rangeHarvest
 import com.koisv.support.tools.Instance.Companion.rangeSoil
 import com.koisv.support.tools.Shops
 import org.bukkit.entity.Player
 import com.koisv.support.tools.Shops.Companion.shopItem
+import com.koisv.support.tools.Stats
 import org.bukkit.Material
+import org.bukkit.block.Block
+import org.bukkit.block.data.Ageable
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.player.PlayerHarvestBlockEvent
 
 class Farmer {
     companion object {
@@ -77,6 +83,42 @@ class Farmer {
                 Material.SUGAR_CANE -> 175
                 Material.SWEET_BERRIES -> 175
                 else -> 0
+            }
+        }
+
+        fun expWorks(e: PlayerHarvestBlockEvent) {
+            expExecute(e.player, e.harvestedBlock)
+        }
+        fun expWorks(e: BlockBreakEvent) {
+            expExecute(e.player, e.block)
+        }
+
+        private fun expExecute(p: Player,b: Block) {
+            when (val data = b.blockData) {
+                is Ageable -> {
+                    if (data.age == data.maximumAge) {
+                        Stats.setStat(when(data.age) {
+                            2 -> 2
+                            3 -> 3
+                            else -> 7 },p,"Farm")
+                        Stats.showStat(p,"Farm")
+                    }
+                }
+                else -> {
+                    if (b.type == Material.SUGAR_CANE && !Main.placeCheck.contains(b)) {
+                        Stats.setStat(1,p,"Farm")
+                        Stats.showStat(p,"Farm")
+                    } else if (Main.placeCheck.contains(b)) {
+                        Main.placeCheck.remove(b)
+                        val nl = b.location
+                        nl.y += 1
+                        val b1 = b.world.getBlockAt(nl)
+                        if (Main.placeCheck.contains(b1)) Main.placeCheck.remove(b1)
+                        nl.y += 1
+                        val b2 = b.world.getBlockAt(nl)
+                        if (Main.placeCheck.contains(b2)) Main.placeCheck.remove(b2)
+                    }
+                }
             }
         }
     }
