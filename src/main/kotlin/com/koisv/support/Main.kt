@@ -4,6 +4,8 @@ import com.koisv.support.commands.Game
 import com.koisv.support.commands.Menu
 import com.koisv.support.commands.Reload
 import com.koisv.support.commands.StatManage
+import com.koisv.support.tools.Instance
+import hazae41.minecraft.kutils.bukkit.info
 import hazae41.minecraft.kutils.get
 import io.github.monun.kommand.kommand
 import net.milkbowl.vault.chat.Chat
@@ -28,36 +30,12 @@ class Main : JavaPlugin() {
             private set
         lateinit var stats: YamlConfiguration
             private set
-        lateinit var statsloc: File
-            private set
-        lateinit var colors: (ChatColor) -> Color
+        lateinit var statsLoc: File
             private set
         lateinit var shop: YamlConfiguration
             private set
         var placeCheck: MutableList<Block> = mutableListOf()
-    }
-
-    private fun setupEconomy(): Boolean {
-        if (server.pluginManager.getPlugin("Vault") == null) {
-            return false
-        }
-        val rsp: RegisteredServiceProvider<Economy> = server.servicesManager.getRegistration(
-            Economy::class.java
-        ) ?: return true
-        econ = rsp.provider
-        return econ != null
-    }
-
-    private fun setupChat(): Boolean {
-        val rsp: RegisteredServiceProvider<Chat> = server.servicesManager.getRegistration(
-            Chat::class.java
-        ) ?: return true
-        chat = rsp.provider
-        return chat != null
-    }
-
-    override fun onEnable() {
-        colors = fun(cc: ChatColor): Color {
+        fun colors(cc: ChatColor): Color {
             return when (cc) {
                 ChatColor.AQUA -> Color.AQUA
                 ChatColor.BLACK -> Color.BLACK
@@ -78,38 +56,44 @@ class Main : JavaPlugin() {
                 else -> Color.WHITE
             }
         }
+    }
+
+    private fun setupVault(): Boolean {
+        if (server.pluginManager.getPlugin("Vault") == null) {
+            return false
+        }
+        val rspE: RegisteredServiceProvider<Economy> = server.servicesManager.getRegistration(
+            Economy::class.java
+        ) ?: return true
+        val rspC: RegisteredServiceProvider<Chat> = server.servicesManager.getRegistration(
+            Chat::class.java
+        ) ?: return true
+        econ = rspE.provider
+        chat = rspC.provider
+        return chat != null && econ != null
+    }
+
+    override fun onEnable() {
         fun getCC() : Plugin? {
             return Bukkit.getPluginManager().getPlugin("CustomEnchants")
         }
-        if (!setupEconomy() && getCC() == null) {
-            if (!setupEconomy()) println(String.format("[%s] - Vault가 감지되지 않았습니다!", description.name))
-            if (getCC() == null) println(String.format("[%s] - CustomEnchants가 감지되지 않았습니다!", description.name))
+        if (!setupVault() && getCC() == null) {
+            if (!setupVault()) info("[${description.name}] - Vault가 감지되지 않았습니다!")
+            if (getCC() == null) info("[${description.name}] - CustomEnchants가 감지되지 않았습니다!")
             server.pluginManager.disablePlugin(this)
             return
         }
 
-        setupChat()
-        println(String.format("[%s] - 가동 시작!", description.name))
+        info("[${description.name}] - 가동 시작!")
 
         instance = this
+        Events(this)
 
-        server.pluginManager.registerEvents(Events(), this)
-        saveDefaultConfig()
-
-        stats = YamlConfiguration.loadConfiguration(dataFolder["data"]["stats.yml"])
-        statsloc = dataFolder["data"]["stats.yml"]
-
-        if (!dataFolder["data"]["stats.yml"].canRead()) {
-            dataFolder["data"].mkdir()
-            stats.save(statsloc)
-        }
-
+        statsLoc = dataFolder["data"]["stats.yml"]
+        stats = YamlConfiguration.loadConfiguration(statsLoc)
         shop = YamlConfiguration.loadConfiguration(dataFolder["data"]["shop.yml"])
+        Instance.init(dataFolder)
 
-        if (!dataFolder["data"]["shop.yml"].canRead()) {
-            dataFolder["data"].mkdir()
-            shop.save(dataFolder["data"]["shop.yml"])
-        }
         kommand {
             register("ks") {
                 Reload.register(this)
@@ -128,6 +112,6 @@ class Main : JavaPlugin() {
 
     override fun onDisable() {
         saveConfig()
-        println(String.format("[%s] - 가동 중지.", description.name))
+        info("[${description.name}] - 가동 중지.")
     }
 }

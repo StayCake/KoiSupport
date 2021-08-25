@@ -4,7 +4,6 @@ import com.koisv.support.Main
 import hazae41.minecraft.kutils.get
 import io.github.monun.kommand.node.LiteralNode
 import net.kyori.adventure.key.Key
-import org.bukkit.Sound
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
@@ -20,8 +19,8 @@ object Reload {
         return Main.stats
     }
 
-    private fun getStatsloc(): File {
-        return Main.statsloc
+    private fun getStatsLoc(): File {
+        return Main.statsLoc
     }
 
     fun register(builder: LiteralNode) {
@@ -32,7 +31,7 @@ object Reload {
             executes {
                 val p = sender as Player
                 getInstance().config.load(getInstance().dataFolder["config.yml"])
-                getStats().load(getStatsloc())
+                getStats().load(getStatsLoc())
                 Main.shop.load(getInstance().dataFolder["data"]["shop.yml"])
                 p.sendMessage("리로드 완료!")
                 p.playSound(

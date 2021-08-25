@@ -28,12 +28,12 @@ import kotlin.math.ceil
 
 class MoneyUI {
     companion object {
-        fun mainui(it: KommandSource, prv: StaticPane? = null): ChestGui {
-            val moneyp = StaticPane(9,3)
+        fun mainUi(it: KommandSource, prv: StaticPane? = null): ChestGui {
+            val moneyP = StaticPane(9,3)
             val p = it.sender as Player
             val g = ChestGui(3, "§a메뉴")
-            val mainp = StaticPane(9,4)
-            val mainh = ItemStack(Material.PLAYER_HEAD).apply {
+            val mainP = StaticPane(9,4)
+            val mainH = ItemStack(Material.PLAYER_HEAD).apply {
                 itemMeta = itemMeta.apply {
                     val skull: SkullMeta = this as SkullMeta
                     skull.owningPlayer = p
@@ -87,13 +87,13 @@ class MoneyUI {
             }
             val btn1 = GuiItem(btn1i) { e ->
                 e.isCancelled = true
-                mainp.isVisible = false
-                moneyp.isVisible = true
+                mainP.isVisible = false
+                moneyP.isVisible = true
                 g.update()
             }
-            val head = GuiItem(mainh)
-            mainp.addItem(head, 4, 0)
-            mainp.addItem(btn1, 1, 1)
+            val head = GuiItem(mainH)
+            mainP.addItem(head, 4, 0)
+            mainP.addItem(btn1, 1, 1)
             g.setOnGlobalClick { e ->
                 e.isCancelled = true
             }
@@ -110,8 +110,8 @@ class MoneyUI {
                 }
             ) { e ->
                 e.isCancelled = true
-                paytarget(e.whoClicked as Player) {
-                    mainui(it,moneyp).show(e.whoClicked)
+                payTarget(e.whoClicked as Player) {
+                    mainUi(it,moneyP).show(e.whoClicked)
                 }
             }
             val check = GuiItem(
@@ -124,21 +124,21 @@ class MoneyUI {
                     }
                 }
             )
-            moneyp.addItem(pay,1,1)
-            moneyp.addItem(check,3,1)
+            moneyP.addItem(pay,1,1)
+            moneyP.addItem(check,3,1)
 
             g.setOnClose {
                 if (it.reason != InventoryCloseEvent.Reason.OPEN_NEW) {
                     when {
                         prv?.isVisible == true -> {
                             prv.isVisible = false
-                            mainp.isVisible = true
+                            mainP.isVisible = true
                             g.show(it.player)
                             g.update()
                         }
-                        moneyp.isVisible -> {
-                            moneyp.isVisible = false
-                            mainp.isVisible = true
+                        moneyP.isVisible -> {
+                            moneyP.isVisible = false
+                            mainP.isVisible = true
                             g.show(it.player)
                             g.update()
                         }
@@ -146,25 +146,25 @@ class MoneyUI {
                 }
             }
 
-            g.addPane(moneyp)
-            g.addPane(mainp)
+            g.addPane(moneyP)
+            g.addPane(mainP)
             g.panes.forEach { it.isVisible = false }
             if (prv != null) {
                 g.addPane(prv)
                 prv.isVisible = true
             } else {
-                mainp.isVisible = true
+                mainP.isVisible = true
             }
             return g
         }
-        private fun paytarget(p: Player, callback: () -> Unit) {
+        private fun payTarget(p: Player, callback: () -> Unit) {
             p.closeInventory(InventoryCloseEvent.Reason.OPEN_NEW)
             val players = Bukkit.getOnlinePlayers()
             val length = ceil(players.size.toFloat() / 9)
-            val paypane = OutlinePane(0,0,if (length > 6) 8 else 9,length.toInt())
-            val payselect = ChestGui(if (length > 6) 6 else length.toInt(),"대상 선택")
-            paypane.orientation = Orientable.Orientation.HORIZONTAL // 수평 -
-            if (paypane.length == 8) {
+            val payPane = OutlinePane(0,0,if (length > 6) 8 else 9,length.toInt())
+            val paySelect = ChestGui(if (length > 6) 6 else length.toInt(),"대상 선택")
+            payPane.orientation = Orientable.Orientation.HORIZONTAL // 수평 -
+            if (payPane.length == 8) {
                 val slider = Slider(8, 0, 1, 6)
                 val pages = ceil(players.size.toFloat() / 48)
                 val terms = 1.0 / pages
@@ -174,19 +174,19 @@ class MoneyUI {
                     var line = 0
                     while (term <= 1) {
                         if (value < term) {
-                            paypane.x = 0-line
-                            payselect.update()
+                            payPane.x = 0-line
+                            paySelect.update()
                         }
                         term += terms
                         line++
                     }
                 }
                 slider.orientation = Orientable.Orientation.VERTICAL // 수직 |
-                payselect.addPane(slider)
+                paySelect.addPane(slider)
             }
             players.forEach { it2 ->
                 if (it2 == p) return@forEach
-                paypane.addItem(makeskull(it2) {
+                payPane.addItem(makeSkull(it2) {
                     amount(p) { it3, amount ->
                         val pl = it3.whoClicked
                         pl.closeInventory(InventoryCloseEvent.Reason.UNLOADED)
@@ -198,14 +198,14 @@ class MoneyUI {
                     }
                 })
             }
-            paypane.isVisible = true
-            payselect.setOnClose {
+            payPane.isVisible = true
+            paySelect.setOnClose {
                 if (it.reason != InventoryCloseEvent.Reason.OPEN_NEW) callback()
             }
-            payselect.addPane(paypane)
-            payselect.show(p)
+            paySelect.addPane(payPane)
+            paySelect.show(p)
         }
-        private fun makeskull(p: Player,event:(ice: InventoryClickEvent) -> Unit) : GuiItem{
+        private fun makeSkull(p: Player, event:(ice: InventoryClickEvent) -> Unit) : GuiItem{
             return GuiItem(
                 ItemStack(Material.PLAYER_HEAD).apply {
                     itemMeta = itemMeta.apply {
@@ -218,13 +218,13 @@ class MoneyUI {
                 event(it)
             }
         }
-        private fun amount(p:Player, nextwork: (event: InventoryClickEvent,result: Double) -> Unit) {
+        private fun amount(p:Player, nextWork: (event: InventoryClickEvent, result: Double) -> Unit) {
             var index = 0
             var amount = 0.0
-            var valst = "1"
+            var valST = "1"
             val amountGui = ChestGui(3,"금액 결정")
-            val amountpane = StaticPane(9,3)
-            val amountpaper = ItemStack(Material.PAPER).apply {
+            val amountPane = StaticPane(9,3)
+            val amountPaper = ItemStack(Material.PAPER).apply {
                 itemMeta = itemMeta.apply {
                     displayName(Component.text("${amount.toInt()} 원")
                         .decoration(TextDecoration.ITALIC,false))
@@ -238,41 +238,41 @@ class MoneyUI {
                     ))
                 }
             }
-            fun paperevent(it: InventoryClickEvent) {
+            fun paperEvent(it: InventoryClickEvent) {
                 it.isCancelled = true
                 when {
                     it.isLeftClick -> {
                         if (amount == 0.0) {
                             it.whoClicked.playSound(sound(Key.key("block.note_block.harp"), Source.PLAYER,1F, 0.5F))
                             it.whoClicked.msg("0이 될 수 없습니다.")
-                        } else nextwork(it,amount)
+                        } else nextWork(it,amount)
                     }
                     it.isRightClick -> {
                         amount = 0.0
-                        amountpane.addItem(GuiItem(amountpaper.apply {
+                        amountPane.addItem(GuiItem(amountPaper.apply {
                             itemMeta = itemMeta.apply {
                                 displayName(Component.text("금액 : ${amount.toInt()} 원")
                                     .decoration(TextDecoration.ITALIC,false))
                             }
-                        }) { pp -> paperevent(pp)},4,2)
+                        }) { pp -> paperEvent(pp)},4,2)
                         amountGui.update()
                     }
                 }
             }
             while (index < 9) {
-                val value = valst.toInt()
-                amountpane.addItem(
+                val value = valST.toInt()
+                amountPane.addItem(
                     GuiItem(
                         ItemStack(Material.YELLOW_STAINED_GLASS_PANE).apply {
                             itemMeta = itemMeta.apply {
-                                displayName(Component.text("금액 : $valst 원")
+                                displayName(Component.text("금액 : $valST 원")
                                     .decoration(TextDecoration.ITALIC,false))
                                 lore(
                                     listOf(
-                                        Component.text("좌클릭 : +$valst")
+                                        Component.text("좌클릭 : +$valST")
                                             .decoration(TextDecoration.ITALIC,false)
                                             .color(TextColor.color(Color.LIME.asRGB())),
-                                        Component.text("우클릭 : -$valst")
+                                        Component.text("우클릭 : -$valST")
                                             .decoration(TextDecoration.ITALIC,false)
                                             .color(TextColor.color(Color.RED.asRGB()))
                                     )
@@ -281,46 +281,46 @@ class MoneyUI {
                         }
                     ) {
                         it.isCancelled = true
-                        val pice = it.whoClicked as Player
+                        val pIce = it.whoClicked as Player
                         when {
                             it.isLeftClick -> {
-                                if (econ?.has(pice,amount + value) == true) {
+                                if (econ?.has(pIce,amount + value) == true) {
                                     amount += value
-                                    amountpane.addItem(GuiItem(amountpaper.apply {
+                                    amountPane.addItem(GuiItem(amountPaper.apply {
                                         itemMeta = itemMeta.apply {
                                             displayName(Component.text("금액 : ${amount.toInt()} 원")
                                                 .decoration(TextDecoration.ITALIC,false))
                                         }
-                                    }) { pp -> paperevent(pp)},4,2)
+                                    }) { pp -> paperEvent(pp)},4,2)
                                     amountGui.update()
                                 } else {
-                                    pice.playSound(sound(Key.key("block.note_block.harp"), Source.PLAYER,1F, 0.5F))
-                                    pice.msg("소지금이 부족합니다.")
+                                    pIce.playSound(sound(Key.key("block.note_block.harp"), Source.PLAYER,1F, 0.5F))
+                                    pIce.msg("소지금이 부족합니다.")
                                 }
                             }
                             it.isRightClick -> {
                                 if (amount - value >= 0) {
                                     amount -= value
-                                    amountpane.addItem(GuiItem(amountpaper.apply {
+                                    amountPane.addItem(GuiItem(amountPaper.apply {
                                         itemMeta = itemMeta.apply {
                                             displayName(Component.text("금액 : ${amount.toInt()} 원")
                                                 .decoration(TextDecoration.ITALIC,false))
                                         }
-                                    }) { pm -> paperevent(pm)},4,2)
+                                    }) { pm -> paperEvent(pm)},4,2)
                                     amountGui.update()
                                 } else {
-                                    pice.playSound(sound(Key.key("block.note_block.harp"), Source.PLAYER,1F, 0.5F))
-                                    pice.msg("음수가 될 수 없습니다.")
+                                    pIce.playSound(sound(Key.key("block.note_block.harp"), Source.PLAYER,1F, 0.5F))
+                                    pIce.msg("음수가 될 수 없습니다.")
                                 }
                             }
                         }
                     },index,1
                 )
                 index++
-                valst += "0"
+                valST += "0"
             }
-            amountpane.addItem(GuiItem(amountpaper) { fp -> paperevent(fp)},4,2)
-            amountGui.addPane(amountpane)
+            amountPane.addItem(GuiItem(amountPaper) { fp -> paperEvent(fp)},4,2)
+            amountGui.addPane(amountPane)
             p.closeInventory(InventoryCloseEvent.Reason.OPEN_NEW)
             amountGui.show(p)
         }

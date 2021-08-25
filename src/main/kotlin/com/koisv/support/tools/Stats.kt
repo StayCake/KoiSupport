@@ -1,13 +1,10 @@
 package com.koisv.support.tools
 
 import com.koisv.support.tools.Instance.Companion.config
-import com.koisv.support.tools.Instance.Companion.rangeHarvest
-import com.koisv.support.tools.Instance.Companion.rangeSoil
 import hazae41.minecraft.kutils.bukkit.msg
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import net.kyori.adventure.text.Component
-import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 
 class Stats {
@@ -51,11 +48,11 @@ class Stats {
                 val prd = Instance.stat.getInt("${p.uniqueId}.${t}Exp")
                 expcalc(d + prd,Instance.stat.getInt("${p.uniqueId}.${t}LV"), p, convert(t))
                 Instance.stat.set("${p.uniqueId}.${t}Exp",d + prd)
-                Instance.stat.save(Instance.statloc)
+                Instance.stat.save(Instance.statLoc)
             } else {
                 Instance.stat.set("${p.uniqueId}.${t}LV",1)
                 Instance.stat.set("${p.uniqueId}.${t}Exp",d)
-                Instance.stat.save(Instance.statloc)
+                Instance.stat.save(Instance.statLoc)
             }
         }
 
@@ -124,7 +121,7 @@ class Stats {
                     else -> ""
                 }
                 Instance.stat.set("${t.uniqueId}.${ts}LV",(cl + ul))
-                Instance.stat.save(Instance.statloc)
+                Instance.stat.save(Instance.statLoc)
             }
         }
     }

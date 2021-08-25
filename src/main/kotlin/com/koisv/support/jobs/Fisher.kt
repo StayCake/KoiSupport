@@ -121,18 +121,18 @@ class Fisher {
                 p.msg("§e어부 §7≫ §f말로만 듣던 고대의 보물..!")
                 Timer().schedule(timerTask {
                     p.playSound(Sound.sound(Key.key("entity.item.pickup"), Sound.Source.PLAYER,1F, 1F))
-                    val scap = Math.random() * 100
+                    val sCap = Math.random() * 100
                     val value: Int = when {
-                        scap >= 50 -> {
+                        sCap >= 50 -> {
                             ((20000 + Math.random() * (30000-20000)) * amount).toInt()
                         }
-                        scap >= 4 -> {
+                        sCap >= 4 -> {
                             ((30000 + Math.random() * (50000-30000)) * amount).toInt()
                         }
-                        scap >= 1 -> {
+                        sCap >= 1 -> {
                             ((50000 + Math.random() * (75000-50000)) * amount).toInt()
                         }
-                        scap >= 0.999 -> {
+                        sCap >= 0.999 -> {
                             ((750000 + Math.random() * (1200000-750000)) * amount).toInt()
                         }
                         else -> {
@@ -158,15 +158,15 @@ class Fisher {
                 p.msg("§e어부 §7≫ §f받아달라는 건가요..?")
                 Timer().schedule(timerTask {
                     p.playSound(Sound.sound(Key.key("entity.item.pickup"), Sound.Source.PLAYER,1F, 1F))
-                    val scap = Math.random() * 100
+                    val sCap = Math.random() * 100
                     val value: Int = when {
-                        scap >= 50 -> {
+                        sCap >= 50 -> {
                             ((10 + Math.random() * (100-10)) * amount).toInt()
                         }
-                        scap >= 4 -> {
+                        sCap >= 4 -> {
                             ((100 + Math.random() * (250-100)) * amount).toInt()
                         }
-                        scap >= 1 -> {
+                        sCap >= 1 -> {
                             ((250 + Math.random() * (500-250)) * amount).toInt()
                         }
                         else -> {
@@ -297,24 +297,24 @@ class Fisher {
                         || item.itemStack == ItemStack(Material.SALMON)
                     )
                     {
-                        val scap = Math.random() * 100
+                        val sCap = Math.random() * 100
                         val length: Float = when {
-                            scap >= 46 -> {
+                            sCap >= 46 -> {
                                 (round((0.01 + Math.random() * (49.99 - 0.01))) * 100 / 100).toFloat()
                             }
-                            scap >= 26 -> {
+                            sCap >= 26 -> {
                                 (round((50 + Math.random() * (99.99 - 50))) * 100 / 100).toFloat()
                             }
-                            scap >= 11 -> {
+                            sCap >= 11 -> {
                                 (round((100 + Math.random() * (149.99 - 100))) * 100 / 100).toFloat()
                             }
-                            scap >= 6 -> {
+                            sCap >= 6 -> {
                                 (round((150 + Math.random() * (199.99 - 150))) * 100 / 100).toFloat()
                             }
-                            scap >= 3 -> {
+                            sCap >= 3 -> {
                                 (round((200 + Math.random() * (209.99 - 200))) * 100 / 100).toFloat()
                             }
-                            scap >= 1 -> {
+                            sCap >= 1 -> {
                                 (round((210 + Math.random() * (229.99 - 210))) * 100 / 100).toFloat()
                             }
                             else -> {

@@ -8,7 +8,7 @@ object Menu {
     fun register(builder: LiteralNode) {
         builder.requires { playerOrNull != null }
         builder.executes {
-            MoneyUI.mainui(this).show(sender as Player)
+            MoneyUI.mainUi(this).show(sender as Player)
         }
     }
 }

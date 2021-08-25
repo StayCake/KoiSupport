@@ -3,14 +3,25 @@ package com.koisv.support.tools
 import com.koisv.customenchants.enchants.RangeHarvest
 import com.koisv.customenchants.enchants.RangeSoil
 import com.koisv.support.Main
-import org.bukkit.NamespacedKey
+import hazae41.minecraft.kutils.get
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
 import java.io.File
-import kotlin.reflect.KClass
 
 class Instance {
     companion object {
+        fun init(dataFolder: File) {
+            Main.instance.saveDefaultConfig()
+            if (!dataFolder["data"]["shop.yml"].canRead()) {
+                dataFolder["data"].mkdir()
+                Main.shop.save(dataFolder["data"]["shop.yml"])
+            }
+            if (!dataFolder["data"]["stats.yml"].canRead()) {
+                dataFolder["data"].mkdir()
+                Main.stats.save(Main.statsLoc)
+            }
+        }
+
         private fun getInstance(): Plugin {
             return Main.instance
         }
@@ -19,8 +30,8 @@ class Instance {
             return Main.stats
         }
 
-        private fun getStatsloc(): File {
-            return Main.statsloc
+        private fun getStatsLoc(): File {
+            return Main.statsLoc
         }
 
         private fun getShop(): YamlConfiguration {
@@ -31,9 +42,9 @@ class Instance {
 
         val stat = getStats()
 
-        val statloc = getStatsloc()
+        val statLoc = getStatsLoc()
 
-        val customshop = getShop()
+        val customShop = getShop()
 
         val rangeSoil = RangeSoil()
 
