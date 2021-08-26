@@ -7,7 +7,7 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.koisv.support.Main
 import com.koisv.support.econ
 import com.koisv.support.misc.tools.Instance
-import com.koisv.support.misc.tools.Shops.Companion.shopItem
+import com.koisv.support.misc.tools.Shops.shopItem
 import com.koisv.support.misc.tools.Stats
 import com.koisv.support.misc.ui.GameUI
 import hazae41.minecraft.kutils.bukkit.msg

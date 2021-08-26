@@ -2,18 +2,16 @@ package com.koisv.support.jobs
 
 import com.koisv.support.Main.Companion.instance
 import com.koisv.support.misc.extend.PlayerExtend.giveItem
+import com.koisv.support.misc.tools.Utils.getBlockFace
 import hazae41.minecraft.kutils.bukkit.msg
 import hazae41.minecraft.kutils.bukkit.schedule
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
 import org.bukkit.Material
 import org.bukkit.Particle
-import org.bukkit.block.Block
-import org.bukkit.block.BlockFace
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
-import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.CreatureSpawnEvent
@@ -79,13 +77,6 @@ class WoodCutter {
                     else e.player.giveItem(tool)
                 }
             }
-        }
-        private fun getBlockFace(player: Player): BlockFace? {
-            val lastTwoTargetBlocks: List<Block> = player.getLastTwoTargetBlocks(null, 100)
-            if (lastTwoTargetBlocks.size != 2 || !lastTwoTargetBlocks[1].type.isOccluding) return null
-            val targetBlock: Block = lastTwoTargetBlocks[1]
-            val adjacentBlock: Block = lastTwoTargetBlocks[0]
-            return targetBlock.getFace(adjacentBlock)
         }
     }
 }
