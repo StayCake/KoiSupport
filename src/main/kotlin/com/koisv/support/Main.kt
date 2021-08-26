@@ -4,7 +4,7 @@ import com.koisv.support.commands.Game
 import com.koisv.support.commands.Menu
 import com.koisv.support.commands.Reload
 import com.koisv.support.commands.StatManage
-import com.koisv.support.tools.Instance
+import com.koisv.support.misc.tools.Instance
 import hazae41.minecraft.kutils.bukkit.info
 import hazae41.minecraft.kutils.get
 import io.github.monun.kommand.kommand

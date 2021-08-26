@@ -4,10 +4,10 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.koisv.customenchants.Utils.Misc.Companion.hoe
 import com.koisv.support.Main
-import com.koisv.support.tools.Instance.Companion.rangeHarvest
-import com.koisv.support.tools.Instance.Companion.rangeSoil
-import com.koisv.support.tools.Shops.Companion.shopItem
-import com.koisv.support.tools.Stats
+import com.koisv.support.misc.tools.Instance.Companion.rangeHarvest
+import com.koisv.support.misc.tools.Instance.Companion.rangeSoil
+import com.koisv.support.misc.tools.Shops.Companion.shopItem
+import com.koisv.support.misc.tools.Stats
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.data.Ageable

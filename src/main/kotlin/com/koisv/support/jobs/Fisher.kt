@@ -3,9 +3,9 @@ package com.koisv.support.jobs
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.koisv.support.econ
-import com.koisv.support.tools.Instance
-import com.koisv.support.tools.Shops
-import com.koisv.support.tools.Stats
+import com.koisv.support.misc.tools.Instance
+import com.koisv.support.misc.tools.Shops
+import com.koisv.support.misc.tools.Stats
 import hazae41.minecraft.kutils.bukkit.msg
 import hazae41.minecraft.kutils.textOf
 import net.kyori.adventure.key.Key

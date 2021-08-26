@@ -1,4 +1,4 @@
-package com.koisv.support.tools
+package com.koisv.support.misc.tools
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
@@ -7,9 +7,9 @@ import com.koisv.support.econ
 import com.koisv.support.jobs.Farmer
 import com.koisv.support.jobs.Fisher
 import com.koisv.support.jobs.Miner
-import com.koisv.support.tools.Instance.Companion.rangeHarvest
-import com.koisv.support.tools.Instance.Companion.rangeSoil
-import com.koisv.support.tools.Stats.Companion.convert
+import com.koisv.support.misc.tools.Instance.Companion.rangeHarvest
+import com.koisv.support.misc.tools.Instance.Companion.rangeSoil
+import com.koisv.support.misc.tools.Stats.Companion.convert
 import hazae41.minecraft.kutils.bukkit.keys
 import hazae41.minecraft.kutils.bukkit.msg
 import hazae41.minecraft.kutils.bukkit.section

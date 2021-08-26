@@ -1,4 +1,4 @@
-package com.koisv.support.ui
+package com.koisv.support.misc.ui
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui

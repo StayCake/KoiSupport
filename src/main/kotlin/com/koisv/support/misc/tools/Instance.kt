@@ -1,4 +1,4 @@
-package com.koisv.support.tools
+package com.koisv.support.misc.tools
 
 import com.koisv.customenchants.enchants.RangeHarvest
 import com.koisv.customenchants.enchants.RangeSoil

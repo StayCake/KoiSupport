@@ -1,6 +1,6 @@
-package com.koisv.support.tools
+package com.koisv.support.misc.tools
 
-import com.koisv.support.tools.Instance.Companion.config
+import com.koisv.support.misc.tools.Instance.Companion.config
 import hazae41.minecraft.kutils.bukkit.msg
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.sound.Sound
