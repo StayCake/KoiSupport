@@ -365,7 +365,6 @@ object GameUI {
                     }
                     for (i in 1..60) {
                         if (alive) {
-                            println(alive)
                             instance.schedule(false) {
                                 val ls = 61 - i
                                 if (ls <= 3) p.playSound(

@@ -15,10 +15,13 @@ import org.bukkit.ChatColor
 import org.bukkit.Color
 import org.bukkit.block.Block
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
+import java.time.LocalTime
+import java.util.*
 
 var econ: Economy? = null
 var chat: Chat? = null
@@ -34,6 +37,10 @@ class Main : JavaPlugin() {
             private set
         lateinit var shop: YamlConfiguration
             private set
+        var woodNow: MutableList<Block> = mutableListOf()
+        var woodOwner: MutableMap<Block, Player> = mutableMapOf()
+        var woodDamage: MutableMap<Block, Int> = mutableMapOf()
+        var woodTime: MutableMap<Block, LocalTime?> = mutableMapOf()
         var placeCheck: MutableList<Block> = mutableListOf()
         fun colors(cc: ChatColor): Color {
             return when (cc) {
@@ -78,13 +85,13 @@ class Main : JavaPlugin() {
             return Bukkit.getPluginManager().getPlugin("CustomEnchants")
         }
         if (!setupVault() && getCC() == null) {
-            if (!setupVault()) info("[${description.name}] - Vault가 감지되지 않았습니다!")
-            if (getCC() == null) info("[${description.name}] - CustomEnchants가 감지되지 않았습니다!")
+            if (!setupVault()) info("Vault가 감지되지 않았습니다!")
+            if (getCC() == null) info("CustomEnchants가 감지되지 않았습니다!")
             server.pluginManager.disablePlugin(this)
             return
         }
 
-        info("[${description.name}] - 가동 시작!")
+        info("가동 시작!")
 
         instance = this
         Events(this)
@@ -112,6 +119,6 @@ class Main : JavaPlugin() {
 
     override fun onDisable() {
         saveConfig()
-        info("[${description.name}] - 가동 중지.")
+        info("가동 중지.")
     }
 }
