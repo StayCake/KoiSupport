@@ -425,7 +425,6 @@ object Shops {
                 else -> {
                     if (custom) {
                         val t = Instance.customShop.section(e.rightClicked.name)?.getKeys(false)
-                        println(t)
                         if (t != null) {
                             val cShop = ChestGui(ceil((t.size.toFloat()) /9).toInt(), e.rightClicked.name)
                             val cPane = StaticPane(9, ceil((t.size.toFloat()) /9).toInt())

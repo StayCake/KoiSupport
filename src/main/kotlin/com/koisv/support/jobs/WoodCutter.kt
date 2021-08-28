@@ -103,7 +103,6 @@ class WoodCutter {
                 fun playerSide(main: Player, target: ArmorStand) {
                     val yaw = main.location.yaw
                     if (yaw >= -135 && yaw < -45) {
-                        println(1)
                         target.setRotation(90.0F, 0.0F)
                         target.teleport(target.location.add(-1.65, 0.0, -1.15))
                     } else if (yaw >= -45 && yaw < 45) {
@@ -190,6 +189,7 @@ class WoodCutter {
                             woodNow.remove(e.block)
                             actionStand.remove()
                             tool.useTool(e.player)
+                            e.player.giveItem(tool)
                             if (damage == woodMax[tool.type]?.minus(1)) {
                                 woodOwner.remove(e.block)
                                 woodDamage.remove(e.block)
@@ -209,7 +209,6 @@ class WoodCutter {
                                     }
                                 }
                             }
-                            e.player.giveItem(tool)
                         }
                     }
                 } else if (woodNow.contains(e.block)) {
