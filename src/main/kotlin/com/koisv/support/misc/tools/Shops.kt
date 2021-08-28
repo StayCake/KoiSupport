@@ -10,6 +10,7 @@ import com.koisv.support.jobs.Miner
 import com.koisv.support.misc.tools.Instance.rangeHarvest
 import com.koisv.support.misc.tools.Instance.rangeSoil
 import com.koisv.support.misc.tools.Stats.convert
+import com.koisv.support.misc.tools.Stats.getStat
 import hazae41.minecraft.kutils.bukkit.keys
 import hazae41.minecraft.kutils.bukkit.msg
 import hazae41.minecraft.kutils.bukkit.section
@@ -117,7 +118,7 @@ object Shops {
         val price = shopStat[0]
         val who = shopStat[1]
         val statName = shopStat[2]
-        val playerLV = Stats.getStat(p, type)
+        val playerLV = p.getStat(type)
         val priceInt = price.filter{ it.isDigit() }.toInt()
         val main = ItemStack(Item).apply {
             itemMeta = itemMeta.apply {
@@ -201,7 +202,7 @@ object Shops {
         val price = shopStat[0]
         val who = shopStat[1]
         val statName = shopStat[2]
-        val playerLV = Stats.getStat(p, type)
+        val playerLV = p.getStat(type)
         val priceInt = price.filter{ it.isDigit() }.toInt()
         val main = ItemStack(Material.ENCHANTED_BOOK).apply {
             itemMeta = itemMeta.apply {
@@ -278,7 +279,7 @@ object Shops {
         val price = shopStat[0]
         val who = shopStat[1]
         val statName = shopStat[2]
-        val playerLV = Stats.getStat(p, type)
+        val playerLV = p.getStat(type)
         val priceInt = price.filter{ it.isDigit() }.toInt()
         val enchantName = when (enchantKey) {
             rangeSoil.key -> {

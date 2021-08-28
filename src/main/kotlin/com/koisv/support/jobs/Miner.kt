@@ -8,7 +8,9 @@ import com.koisv.support.Main
 import com.koisv.support.econ
 import com.koisv.support.misc.tools.Instance
 import com.koisv.support.misc.tools.Shops.shopItem
-import com.koisv.support.misc.tools.Stats
+import com.koisv.support.misc.tools.Stats.getStat
+import com.koisv.support.misc.tools.Stats.setStat
+import com.koisv.support.misc.tools.Stats.showStat
 import com.koisv.support.misc.ui.GameUI
 import hazae41.minecraft.kutils.bukkit.msg
 import net.kyori.adventure.text.Component
@@ -56,7 +58,7 @@ class Miner {
                         val reItem = GuiItem(its.cursor as ItemStack)
                         val repairBook = GuiItem(
                             ItemStack(Material.ANVIL).apply {
-                                val level = Stats.getStat(p,"Mine")
+                                val level = p.getStat("Mine")
                                 val cost = when {
                                     level > 40 -> 4500000
                                     level > 25 -> 1500000
@@ -100,7 +102,7 @@ class Miner {
                                 }
                             }
                         ) {
-                            val level = Stats.getStat(p,"Mine")
+                            val level = p.getStat("Mine")
                             val cost = when {
                                 level > 40 -> 4500000
                                 level > 25 -> 1500000
@@ -300,8 +302,8 @@ class Miner {
                     e.expToDrop = (e.expToDrop * Instance.config.getDouble("values.multiplier.miner")).toInt()
                 }
                 if (e.expToDrop > 0) {
-                    Stats.setStat(e.expToDrop, p, "Mine")
-                    Stats.showStat(p, "Mine")
+                    p.setStat(e.expToDrop, "Mine")
+                    p.showStat("Mine")
                 }
             }
         }

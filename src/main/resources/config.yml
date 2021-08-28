@@ -3,12 +3,15 @@ values:
     fisher: 72
     farmer: 100
     miner: 65
+    woodcut: 8
   firstexp:
     fisher: 200
     farmer: 320
     miner: 50
+    woodcut: 5
   multiplier:
     fisher: 1.05
     farmer: 1.05
     miner: 1.05
+    woodcut: 2
 SIXTY_NINE_OPTIONS: "6974" # 가능

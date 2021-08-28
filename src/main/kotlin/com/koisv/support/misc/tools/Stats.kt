@@ -19,6 +19,9 @@ object Stats {
             "Mine" -> {
                 listOf(if (target.hasPermission("miner.mine")) "${(price * 0.95).toInt()}원 [광부 할인가]" else "${price}원","§b광부","채광")
             }
+            "WoodCut" -> {
+                listOf(if (target.hasPermission("woodcutter.wood")) "${(price * 0.95).toInt()}원 [나무꾼 할인가]" else "${price}원","§d나무꾼","벌목")
+            }
             "shop" -> {
                 listOf(if (target.hasPermission("admin.sale")) "${(price * 0.95).toInt()}원 [상점 할인가]" else "${price}원","§1상인","")
             }
@@ -33,46 +36,45 @@ object Stats {
             "Fish" -> "fisher"
             "Farm" -> "farmer"
             "Mine" -> "miner"
+            "WoodCut" -> "woodcut"
             else -> "null"
         }
     }
 
-    fun setStat(
+    fun Player.setStat(
         d: Int,
-        p: Player,
         t: String
     ) {
-        if (Instance.stat.isInt("${p.uniqueId}.${t}Exp")){
-            val prd = Instance.stat.getInt("${p.uniqueId}.${t}Exp")
-            expcalc(d + prd,Instance.stat.getInt("${p.uniqueId}.${t}LV"), p, convert(t))
-            Instance.stat.set("${p.uniqueId}.${t}Exp",d + prd)
+        if (Instance.stat.isInt("${this.uniqueId}.${t}Exp")){
+            val prd = Instance.stat.getInt("${this.uniqueId}.${t}Exp")
+            expCalc(d + prd,Instance.stat.getInt("${this.uniqueId}.${t}LV"), this, convert(t))
+            Instance.stat.set("${this.uniqueId}.${t}Exp",d + prd)
             Instance.stat.save(Instance.statLoc)
         } else {
-            Instance.stat.set("${p.uniqueId}.${t}LV",1)
-            Instance.stat.set("${p.uniqueId}.${t}Exp",d)
+            Instance.stat.set("${this.uniqueId}.${t}LV",1)
+            Instance.stat.set("${this.uniqueId}.${t}Exp",d)
             Instance.stat.save(Instance.statLoc)
         }
     }
 
-    fun getStat(
-        p: Player,
+    fun Player.getStat(
         t: String
     ): Int {
-        return if (Instance.stat.isInt("${p.uniqueId}.${t}LV")){
-            Instance.stat.getInt("${p.uniqueId}.${t}LV")
+        return if (Instance.stat.isInt("${this.uniqueId}.${t}LV")){
+            Instance.stat.getInt("${this.uniqueId}.${t}LV")
         } else {
             0
         }
     }
 
-    fun showStat(p : Player, t: String){
-        val lv = getStat(p,t)
+    fun Player.showStat(t: String){
+        val lv = this.getStat(t)
         val type = convert(t)
         val first = config.getInt("values.firstexp.$type")
         val term = config.getInt("values.expterm.$type")
         val max = lv * ( first + ( first + ( term * (lv-1) ) ) )/ 2
-        val exp = if (Instance.stat.isInt("${p.uniqueId}.${t}Exp")){
-            Instance.stat.getInt("${p.uniqueId}.${t}Exp")
+        val exp = if (Instance.stat.isInt("${this.uniqueId}.${t}Exp")){
+            Instance.stat.getInt("${this.uniqueId}.${t}Exp")
         } else {
             0
         }
@@ -80,12 +82,13 @@ object Stats {
             "Fish" -> "낚시"
             "Mine" -> "채광"
             "Farm" -> "농사"
+            "WoodCut" -> "벌목"
             else -> ""
         }
-        p.sendActionBar(Component.text("$m Lv.$lv | $exp / $max"))
+        this.sendActionBar(Component.text("$m Lv.$lv | $exp / $max"))
     }
 
-    private fun expcalc(i: Int, cl: Int, t: Player, type: String) {
+    private fun expCalc(i: Int, cl: Int, t: Player, type: String) {
         val first = config.getInt("values.firstexp.$type")
         val term = config.getInt("values.expterm.$type")
         var explv = cl * ( first + ( first + ( term * (cl-1) ) ) )/ 2
@@ -93,6 +96,7 @@ object Stats {
             "Fish" -> "§e어부"
             "Farm" -> "§a농부"
             "Mine" -> "§b광부"
+            "WoodCut" -> "§d나무꾼"
             else -> ""
         }
         var ccl = cl
@@ -116,6 +120,7 @@ object Stats {
                 "fisher" -> "Fish"
                 "farmer" -> "Farm"
                 "miner" -> "Mine"
+                "woodcut" -> "WoodCut"
                 else -> ""
             }
             Instance.stat.set("${t.uniqueId}.${ts}LV",(cl + ul))

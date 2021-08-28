@@ -5,8 +5,10 @@ import com.koisv.support.Main.Companion.woodDamage
 import com.koisv.support.Main.Companion.woodNow
 import com.koisv.support.Main.Companion.woodOwner
 import com.koisv.support.Main.Companion.woodTime
-import com.koisv.support.misc.extend.ItemStackExtend.useTool
-import com.koisv.support.misc.extend.PlayerExtend.giveItem
+import com.koisv.support.misc.tools.MiscExtends.giveItem
+import com.koisv.support.misc.tools.MiscExtends.useTool
+import com.koisv.support.misc.tools.Stats.setStat
+import com.koisv.support.misc.tools.Stats.showStat
 import com.koisv.support.misc.tools.Utils.eulerDegree
 import com.koisv.support.misc.tools.Utils.getBlockFace
 import hazae41.minecraft.kutils.bukkit.msg
@@ -28,7 +30,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import java.time.LocalTime
-import java.util.*
 
 
 class WoodCutter {
@@ -51,6 +52,19 @@ class WoodCutter {
             Material.SPRUCE_LOG
         )
 
+        private val woodMax = mapOf(
+            Material.NETHERITE_AXE to 2,
+            Material.DIAMOND_AXE to 3,
+            Material.IRON_AXE to 4,
+            Material.STONE_AXE to 5,
+            Material.WOODEN_AXE to 6,
+            Material.GOLDEN_AXE to 6,
+        )
+
+        private fun Player.jobExp() {
+            this.setStat(1,"WoodCut")
+            this.showStat("WoodCut")
+        }
         fun jobWorks(e: BlockPlaceEvent) {
             if (e.blockReplacedState.type == Material.OXIDIZED_CUT_COPPER_SLAB) {
                 val mh = e.player.inventory.itemInMainHand
@@ -84,7 +98,7 @@ class WoodCutter {
                         e.player.giveItem(tool)
                     }
                 }
-            } else {
+            } else if (e.player.world == Bukkit.getWorld("world")) {
                 if (owner == null) woodOwner[e.block] = e.player
                 fun playerSide(main: Player, target: ArmorStand) {
                     val yaw = main.location.yaw
@@ -100,7 +114,6 @@ class WoodCutter {
                         target.teleport(target.location.add(1.1, 0.0, -1.65))
                     }
                 }
-
                 fun sidePose(side: BlockFace, target: ArmorStand) {
                     target.rightArmPose = eulerDegree(270.0, 0.0, 270.0)
                     when (side) {
@@ -162,33 +175,42 @@ class WoodCutter {
                         actionStand.setItem(EquipmentSlot.HAND, tool)
                         if (lookFace != null) sidePose(lookFace, actionStand)
                     } as ArmorStand
-                    e.player.sendActionBar(Component.text("나무 : ${(woodDamage[e.block] ?: 0) + 1} / 4"))
+                    e.player.sendActionBar(Component.text("나무 : ${(woodDamage[e.block] ?: 0) + 1} / ${woodMax[tool.type]}"))
                     woodNow.add(e.block)
-                    instance.schedule(false, 1) {
-                        woodNow.remove(e.block)
-                        actionStand.remove()
-                        tool.useTool(e.player)
-                        if (damage == 3) {
-                            woodOwner.remove(e.block)
-                            woodDamage.remove(e.block)
-                            if (e.player.world != Bukkit.getWorld("world")) {
-                                e.block.breakNaturally()
-                            } else e.player.giveItem(e.block.drops)
-                        } else {
-                            val currentDamage = woodDamage[e.block]
-                            woodDamage[e.block] = (currentDamage ?: 0) + 1
-                            woodTime[e.block] = LocalTime.now()
-                            instance.schedule(true, 10) {
-                                Thread.sleep(1)
-                                val now = LocalTime.now()
-                                if (woodTime[e.block]?.plusSeconds(10)?.isBefore(now) == true) {
-                                    woodOwner.remove(e.block)
-                                    woodDamage.remove(e.block)
-                                    woodTime.remove(e.block)
+                    instance.schedule(true) {
+                        Thread.sleep(
+                            when (tool.getEnchantmentLevel(Enchantment.DIG_SPEED)) {
+                                1 -> 800
+                                2 -> 700
+                                3 -> 500
+                                else -> 1000
+                            }
+                        )
+                        instance.schedule (false) {
+                            woodNow.remove(e.block)
+                            actionStand.remove()
+                            tool.useTool(e.player)
+                            if (damage == woodMax[tool.type]?.minus(1)) {
+                                woodOwner.remove(e.block)
+                                woodDamage.remove(e.block)
+                                e.player.giveItem(e.block.drops)
+                                e.player.jobExp()
+                            } else {
+                                val currentDamage = woodDamage[e.block]
+                                woodDamage[e.block] = (currentDamage ?: 0) + 1
+                                woodTime[e.block] = LocalTime.now()
+                                instance.schedule(true, 10) {
+                                    Thread.sleep(1)
+                                    val now = LocalTime.now()
+                                    if (woodTime[e.block]?.plusSeconds(10)?.isBefore(now) == true) {
+                                        woodOwner.remove(e.block)
+                                        woodDamage.remove(e.block)
+                                        woodTime.remove(e.block)
+                                    }
                                 }
                             }
+                            e.player.giveItem(tool)
                         }
-                        e.player.giveItem(tool)
                     }
                 } else if (woodNow.contains(e.block)) {
                     instance.schedule(true) {

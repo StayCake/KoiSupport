@@ -7,7 +7,8 @@ import com.koisv.support.Main
 import com.koisv.support.misc.tools.Instance.rangeHarvest
 import com.koisv.support.misc.tools.Instance.rangeSoil
 import com.koisv.support.misc.tools.Shops.shopItem
-import com.koisv.support.misc.tools.Stats
+import com.koisv.support.misc.tools.Stats.setStat
+import com.koisv.support.misc.tools.Stats.showStat
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.data.Ageable
@@ -96,17 +97,17 @@ class Farmer {
             when (val data = b.blockData) {
                 is Ageable -> {
                     if (data.age == data.maximumAge) {
-                        Stats.setStat(when(data.age) {
+                        p.setStat(when(data.age) {
                             2 -> 2
                             3 -> 3
-                            else -> 7 },p,"Farm")
-                        Stats.showStat(p,"Farm")
+                            else -> 7 },"Farm")
+                        p.showStat("Farm")
                     }
                 }
                 else -> {
                     if (b.type == Material.SUGAR_CANE && !Main.placeCheck.contains(b)) {
-                        Stats.setStat(1,p,"Farm")
-                        Stats.showStat(p,"Farm")
+                        p.setStat(1,"Farm")
+                        p.showStat("Farm")
                     } else if (Main.placeCheck.contains(b)) {
                         Main.placeCheck.remove(b)
                         val nl = b.location

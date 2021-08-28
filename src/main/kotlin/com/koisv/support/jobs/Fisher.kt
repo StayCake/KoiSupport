@@ -5,7 +5,8 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.koisv.support.econ
 import com.koisv.support.misc.tools.Instance
 import com.koisv.support.misc.tools.Shops
-import com.koisv.support.misc.tools.Stats
+import com.koisv.support.misc.tools.Stats.setStat
+import com.koisv.support.misc.tools.Stats.showStat
 import hazae41.minecraft.kutils.bukkit.msg
 import hazae41.minecraft.kutils.textOf
 import net.kyori.adventure.key.Key
@@ -369,9 +370,9 @@ class Fisher {
                     }
                     if (e.player.hasPermission("fisher.fish")) {
                         e.expToDrop = (e.expToDrop * Instance.config.getDouble("values.multiplier.fisher")).toInt()
-                        Stats.setStat(e.expToDrop, e.player, "Fish")
+                        e.player.setStat(e.expToDrop, "Fish")
                     } else {
-                        Stats.setStat(e.expToDrop, e.player, "Fish")
+                        e.player.setStat(e.expToDrop, "Fish")
                     }
                 } else {
                     val mh = e.player.inventory.itemInMainHand
@@ -431,7 +432,7 @@ class Fisher {
                         }
                     }
                 }
-                Stats.showStat(e.player,"Fish")
+                e.player.showStat("Fish")
             }
             if (e.state == PlayerFishEvent.State.FAILED_ATTEMPT || e.state == PlayerFishEvent.State.REEL_IN || e.state == PlayerFishEvent.State.IN_GROUND) {
                 e.player.sendActionBar(
