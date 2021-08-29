@@ -7,6 +7,7 @@ import com.koisv.support.econ
 import com.koisv.support.jobs.Farmer
 import com.koisv.support.jobs.Fisher
 import com.koisv.support.jobs.Miner
+import com.koisv.support.jobs.WoodCutter
 import com.koisv.support.misc.tools.Instance.rangeHarvest
 import com.koisv.support.misc.tools.Instance.rangeSoil
 import com.koisv.support.misc.tools.Stats.convert
@@ -422,6 +423,20 @@ object Shops {
                         gui.show(e.player)
                     }
                 }
+                "나무꾼" -> {
+                    if (!e.player.isSneaking) {
+                        e.player.msg(
+                            """
+                        |§d나무꾼 §7≫ §f안녕!
+                        |§d나무꾼 §7≫ §f좋은 나무가 있다면 보여 달라고
+                        |§d나무꾼 §7≫ §f뭉탱이로 보여주면 더욱 좋지.
+                        |§d나무꾼 §7≫ §f나만 줘. 웅크리고 우클릭해서 물건을 봐도 좋고!""".trimMargin()
+                        )
+                    } else {
+                        val gui = WoodCutter.woodGui(e.player)
+                        gui.show(e.player)
+                    }
+                }
                 else -> {
                     if (custom) {
                         val t = Instance.customShop.section(e.rightClicked.name)?.getKeys(false)
@@ -596,6 +611,27 @@ object Shops {
                     } else {
                         val amt = pmh.amount
                         val cost = Farmer.getCropCost(pmh.type)
+                        if (cost != 0) p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
+                        finalCost += if (mine) (cost * amt * 1.05).toInt() else cost * amt
+                    }
+                }
+                "나무꾼" -> {
+                    target = "§d나무꾼"
+                    if (p.isSneaking) {
+                        val i : Inventory = p.inventory
+                        i.forEach {
+                            if (it != null) {
+                                val mh: ItemStack = it
+                                val mi = i.contents.indexOf(mh)
+                                val amt = mh.amount
+                                val cost = WoodCutter.getWoodCost(mh.type)
+                                if (cost != 0) p.inventory.setItem(mi,ItemStack(Material.AIR))
+                                finalCost += if (mine) (cost * amt * 1.05).toInt() else (cost * amt)
+                            }
+                        }
+                    } else {
+                        val amt = pmh.amount
+                        val cost = WoodCutter.getWoodCost(pmh.type)
                         if (cost != 0) p.equipment?.setItemInMainHand(ItemStack(Material.AIR))
                         finalCost += if (mine) (cost * amt * 1.05).toInt() else cost * amt
                     }

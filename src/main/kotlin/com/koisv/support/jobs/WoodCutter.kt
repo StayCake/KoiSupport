@@ -1,5 +1,7 @@
 package com.koisv.support.jobs
 
+import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
+import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.koisv.support.Main.Companion.instance
 import com.koisv.support.Main.Companion.woodDamage
 import com.koisv.support.Main.Companion.woodNow
@@ -7,6 +9,7 @@ import com.koisv.support.Main.Companion.woodOwner
 import com.koisv.support.Main.Companion.woodTime
 import com.koisv.support.misc.tools.MiscExtends.giveItem
 import com.koisv.support.misc.tools.MiscExtends.useTool
+import com.koisv.support.misc.tools.Shops
 import com.koisv.support.misc.tools.Stats.setStat
 import com.koisv.support.misc.tools.Stats.showStat
 import com.koisv.support.misc.tools.Utils.eulerDegree
@@ -218,6 +221,52 @@ class WoodCutter {
                         e.player.giveItem(tool)
                     }
                 }
+            }
+        }
+
+        fun woodGui(p: Player) : ChestGui {
+            val woodShop = ChestGui(2, "나무꾼 상점")
+            val woodPane = StaticPane(9,2)
+            val ub1 = Shops.shopItem(p, 4, Enchantment.DURABILITY, 1, "내구성 I", 12000, "단단함의 기초.", "WoodCut", axe)
+            val ub2 = Shops.shopItem(p, 10, Enchantment.DURABILITY, 2, "내구성 II", 30000, "견고함의 중점.", "WoodCut", axe)
+            val ub3 = Shops.shopItem(p, 17, Enchantment.DURABILITY, 3, "내구성 III", 64000, "전문가의 손길.", "WoodCut", axe)
+            val ef1 = Shops.shopItem(p, 5, Enchantment.DIG_SPEED, 1, "내구성 I", 20000, "살짝만 갈아보자.", "WoodCut", axe)
+            val ef2 = Shops.shopItem(p, 12, Enchantment.DIG_SPEED, 2, "내구성 II", 50000, "머리카락도 벨 수 있도록.", "WoodCut", axe)
+            val ef3 = Shops.shopItem(p, 20, Enchantment.DIG_SPEED, 3, "내구성 III", 128000, "잘못 잡으면 어떻게 될까?", "WoodCut", axe)
+            val ho1 = Shops.shopItem(p, 0, null, 40000, "금으로 도구를 만든 나머지 너무 약해져 버렸다...", "WoodCut", Material.GOLDEN_AXE)
+            val ho2 = Shops.shopItem(p, 2, null, 100000, "적어도 나무는 금보다 나을 것이다.", "WoodCut", Material.WOODEN_AXE)
+            val ho3 = Shops.shopItem(p, 7, null, 220000, "돌멩이 몇개 주워다 갈아 보았다.", "WoodCut", Material.STONE_AXE)
+            val ho4 = Shops.shopItem(p, 15, null, 480000, "옆집 대장장이 아재가 만들어 주었다.", "WoodCut", Material.IRON_AXE)
+            val ho5 = Shops.shopItem(p, 28, null, 1000000, "보석상이 자신만만하게 만들어 온 녀석이다.", "WoodCut", Material.DIAMOND_AXE)
+            val ho6 = Shops.shopItem(p, 45, null, 2500000, "도를 넘은 전념.", "WoodCut", Material.NETHERITE_AXE)
+
+            val woodCutChest = listOf(
+                null,ub1,ub2,ub3,null,ef1,ef2,ef3,null,
+                null,ho1,ho2,ho3,null,ho4,ho5,ho6,null,
+            )
+            var idx = 0
+            var line = 0
+            woodCutChest.forEach {
+                if (idx == 9) {
+                    idx = 0
+                    line++
+                }
+                it?.let { it1 -> woodPane.addItem(it1,idx,line) }
+                idx++
+            }
+            woodShop.addPane(woodPane)
+            return woodShop
+        }
+
+        fun getWoodCost(type: Material) : Int {
+            return when (type) {
+                Material.ACACIA_LOG -> 10000
+                Material.BIRCH_LOG -> 10000
+                Material.DARK_OAK_LOG -> 10000
+                Material.JUNGLE_LOG -> 10000
+                Material.OAK_LOG -> 10000
+                Material.SPRUCE_LOG -> 10000
+                else -> 0
             }
         }
     }
