@@ -1,13 +1,13 @@
 name: KoiSupport
 main: com.koisv.support.Main
-version: 0.81-SNAPSHOT
+version: 0.83-SNAPSHOT
 api-version: 1.17
 depend:
   - Kotlin
   - CustomEnchants
 load: POSTWORLD
 libraries:
-  - com.github.stefvanschie.inventoryframework:IF:0.10.1
-  - io.github.monun:kommand:2.6.4
+  - com.github.stefvanschie.inventoryframework:IF:0.10.2
+  - io.github.monun:kommand:2.6.5
 loadbefore:
   - Vault

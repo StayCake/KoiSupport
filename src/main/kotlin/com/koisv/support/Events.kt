@@ -1,9 +1,6 @@
 package com.koisv.support
 
-import com.koisv.support.jobs.Farmer
-import com.koisv.support.jobs.Fisher
-import com.koisv.support.jobs.Miner
-import com.koisv.support.jobs.WoodCutter
+import com.koisv.support.jobs.*
 import com.koisv.support.misc.tools.Shops
 import hazae41.minecraft.kutils.bukkit.listen
 import org.bukkit.Material
@@ -26,6 +23,7 @@ class Events(main: Main) {
         }
         main.listen<BlockDamageEvent> {
             WoodCutter.jobWorks(it)
+            Herbalist.jobWorks(it)
         }
         main.listen<PlayerHarvestBlockEvent> {
             Farmer.expWorks(it)

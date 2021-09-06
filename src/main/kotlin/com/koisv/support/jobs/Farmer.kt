@@ -43,12 +43,12 @@ class Farmer {
             val sd7 = shopItem(p, 0, null, 200, "먹기 딱 좋은 크기의 당근이다.", "Farm", Material.CARROT,null)
             val sd8 = shopItem(p, 0, null, 200, "사탕수수. 원래 이거 단단한 녀석 아니었나?", "Farm", Material.SUGAR_CANE,null)
             val sd9 = shopItem(p, 0, null, 200, "달콤한 만큼 당신을 찔러주는 열매다.", "Farm", Material.SWEET_BERRIES,null)
-            val ho1 = shopItem(p, 0, null,60000,"금으로 도구를 만든 나머지 너무 약해져 버렸다...","Farm",Material.GOLDEN_HOE)
-            val ho2 = shopItem(p, 5, null,130000,"적어도 나무는 금보다 나을 것이다.","Farm",Material.WOODEN_HOE)
-            val ho3 = shopItem(p, 12, null,270000,"돌멩이 몇개 주워다 갈아 보았다.","Farm",Material.STONE_HOE)
-            val ho4 = shopItem(p, 19, null,580000,"옆집 대장장이 아재가 만들어 주었다.","Farm",Material.IRON_HOE)
-            val ho5 = shopItem(p, 26, null,1200000,"보석상이 자신만만하게 만들어 온 녀석이다.","Farm",Material.DIAMOND_HOE)
-            val ho6 = shopItem(p, 32, null,2500000,"도를 넘은 전념.","Farm",Material.NETHERITE_HOE)
+            val ho1 = shopItem(p, 0, null,40000,"금으로 도구를 만든 나머지 너무 약해져 버렸다...","Farm",Material.GOLDEN_HOE)
+            val ho2 = shopItem(p, 5, null,90000,"적어도 나무는 금보다 나을 것이다.","Farm",Material.WOODEN_HOE)
+            val ho3 = shopItem(p, 12, null,200000,"돌멩이 몇개 주워다 갈아 보았다.","Farm",Material.STONE_HOE)
+            val ho4 = shopItem(p, 19, null,440000,"옆집 대장장이 아재가 만들어 주었다.","Farm",Material.IRON_HOE)
+            val ho5 = shopItem(p, 26, null,900000,"보석상이 자신만만하게 만들어 온 녀석이다.","Farm",Material.DIAMOND_HOE)
+            val ho6 = shopItem(p, 32, null,2000000,"도를 넘은 전념.","Farm",Material.NETHERITE_HOE)
 
             val farmChest = listOf(
                 ub1,ub2,ub3,ho1,ho2,ho3,ft1,ft2,ft3,

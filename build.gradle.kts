@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.5.30"
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    kotlin("jvm") version "+"
+    id("com.github.johnrengelman.shadow") version "+"
 }
 
 repositories {
@@ -10,13 +10,13 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.stefvanschie.inventoryframework:IF:0.10.1")
-    implementation("com.github.hazae41:mc-kutils:+")
+    compileOnly("io.papermc.paper:paper-api:+") // Paper Latest
     compileOnly(files("/libs/CustomEnchant-dist.jar"))
     compileOnly(kotlin("stdlib")) // Kotlin
-    compileOnly("io.github.monun:kommand-api:2.6.4")
+    compileOnly("io.github.monun:kommand-api:+")
     compileOnly("com.github.milkbowl:VaultAPI:+")
-    compileOnly("io.papermc.paper:paper-api:+") // Paper Latest
+    implementation("com.github.stefvanschie.inventoryframework:IF:+")
+    implementation("com.github.hazae41:mc-kutils:+")
 }
 
 tasks {
